@@ -1,0 +1,638 @@
+<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Author>hslovett</Author>
+  <LastAuthor>hslovett</LastAuthor>
+  <Created>2012-06-22T22:47:31Z</Created>
+  <LastSaved>2012-06-23T23:17:56Z</LastSaved>
+  <Version>14.00</Version>
+ </DocumentProperties>
+ <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
+  <AllowPNG/>
+ </OfficeDocumentSettings>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <WindowHeight>10035</WindowHeight>
+  <WindowWidth>21075</WindowWidth>
+  <WindowTopX>240</WindowTopX>
+  <WindowTopY>45</WindowTopY>
+  <ProtectStructure>False</ProtectStructure>
+  <ProtectWindows>False</ProtectWindows>
+ </ExcelWorkbook>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Bottom"/>
+   <Borders/>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11" ss:Color="#000000"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="s99">
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11"/>
+  </Style>
+  <Style ss:ID="s100">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
+   <Borders/>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="12" ss:Bold="1"/>
+  </Style>
+  <Style ss:ID="s101">
+   <Alignment ss:Vertical="Center" ss:WrapText="1"/>
+   <Borders/>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="12"/>
+  </Style>
+  <Style ss:ID="s102">
+   <Borders/>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Sheet1">
+  <Table ss:ExpandedColumnCount="3" ss:ExpandedRowCount="130" x:FullColumns="1"
+   x:FullRows="1" ss:StyleID="s99" ss:DefaultRowHeight="15">
+   <Column ss:Index="2" ss:StyleID="s102" ss:AutoFitWidth="0" ss:Width="578.25"/>
+   <Column ss:StyleID="s99" ss:Width="111"/>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">A</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Absolute or incremental position of A axis (rotational axis around X axis)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">B</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Absolute or incremental position of B axis (rotational axis around Y axis)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">C</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Absolute or incremental position of C axis (rotational axis around Z axis)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">D</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Defines diameter or radial offset used for cutter compensation. D is used for depth of cut on lathes.</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">E</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Precision feedrate for threading on lathes</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">F</Data></Cell>
+    <Cell><Data ss:Type="String">Defines feed rate</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Address for preparatory commands</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">H</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Defines tool length offset; Incremental axis corresponding to C axis (e.g., on a turn-mill)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">I</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Defines arc center in X axis for G02 or G03 arc commands. Also used as a parameter within some fixed cycles.</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">J</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Defines arc center in Y axis for G02 or G03 arc commands. Also used as a parameter within some fixed cycles.</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">K</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Defines arc center in Z axis for G02 or G03 arc commands. Also used as a parameter within some fixed cycles, equal to L address.</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">L</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Fixed cycle loop count;Specification of what register to edit using G10</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Miscellaneous function</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">N</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Line (block) number in program; System parameter number to be changed using G10</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">O</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Program name</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">P</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Serves as parameter address for various G and M codes</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">Q</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Peck increment in canned cycles</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">R</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Defines size of arc radius or defines retract height in milling canned cycles</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">S</Data></Cell>
+    <Cell><Data ss:Type="String">Defines speed, either spindle speed or surface speed depending on mode</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">T</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Tool selection</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">U</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Incremental axis corresponding to X axis (typically only lathe group A controls). Also defines dwell time on some machines (instead of &quot;P&quot; or &quot;X&quot;).</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">V</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Incremental axis corresponding to Y axis</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">W</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Incremental axis corresponding to Z axis (typically only lathe group A controls)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">X</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Absolute or incremental position of X axis. Also defines dwell time on some machines (instead of &quot;P&quot; or &quot;U&quot;).</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">Y</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Absolute or incremental position of Y axis</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">Z</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Absolute or incremental position of Z axis</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="2" ss:StyleID="s100"/>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G00</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Rapid positioning</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G01</Data></Cell>
+    <Cell><Data ss:Type="String">Linear interpolation</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G02</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Circular interpolation, clockwise</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G03</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Circular interpolation, counterclockwise</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G04</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Dwell</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G05</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">High-precision contour control (HPCC)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G05.1</Data></Cell>
+    <Cell><Data ss:Type="String">Ai Nano contour control</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G06.1</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Non Uniform Rational B Spline Machining</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G07</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Imaginary axis designation</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G09</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Exact stop check</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G10</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Programmable data input</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G11</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Data write cancel</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G12</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Full-circle interpolation, clockwise</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G13</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Full-circle interpolation, counterclockwise</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G17</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">XY plane selection</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G18</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">ZX plane selection</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G19</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">YZ plane selection</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G20</Data></Cell>
+    <Cell><Data ss:Type="String">Programming in inches</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G21</Data></Cell>
+    <Cell><Data ss:Type="String">Programming in millimeters (mm)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G28</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Return to home position (machine zero, aka machine reference point)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G30</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Return to secondary home position (machine zero, aka machine reference point)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G31</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Skip function (used for probes and tool length measurement systems)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G32</Data></Cell>
+    <Cell><Data ss:Type="String">Single-point threading, longhand style (if not using a cycle, e.g., G76)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G33</Data></Cell>
+    <Cell><Data ss:Type="String">Constant-pitch threading</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G33</Data></Cell>
+    <Cell><Data ss:Type="String">Single-point threading, longhand style (if not using a cycle, e.g., G76)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G34</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Variable-pitch threading</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G40</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Tool radius compensation off</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G41</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Tool radius compensation left</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G42</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Tool radius compensation right</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G43</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Tool height offset compensation negative</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G44</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Tool height offset compensation positive</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G45</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Axis offset single increase</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G46</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Axis offset single decrease</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G47</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Axis offset double increase</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G48</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Axis offset double decrease</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G49</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Tool length offset compensation cancel</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G50</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Define the maximum spindle speed</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G50</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Scaling function cancel</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G50</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Position register (programming of vector from part zero to tool tip)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G52</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Local coordinate system (LCS)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G53</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Machine coordinate system</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G70</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Fixed cycle, multiple repetitive cycle, for finishing (including contours)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G71</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Fixed cycle, multiple repetitive cycle, for roughing (Z-axis emphasis)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G72</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Fixed cycle, multiple repetitive cycle, for roughing (X-axis emphasis)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G73</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Fixed cycle, multiple repetitive cycle, for roughing, with pattern repetition</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G73</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Peck drilling cycle for milling - high-speed (NO full retraction from pecks)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G74</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Peck drilling cycle for turning</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G74</Data></Cell>
+    <Cell><Data ss:Type="String">Tapping cycle for milling, lefthand thread, M04 spindle direction</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G75</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Peck grooving cycle for turning</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G76</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Fine boring cycle for milling</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G76</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Threading cycle for turning, multiple repetitive cycle</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G80</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Cancel canned cycle</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G81</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Simple drilling cycle</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G82</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Drilling cycle with dwell</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G83</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Peck drilling cycle (full retraction from pecks)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G84</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Tapping cycle, righthand thread, M03 spindle direction</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G84.2</Data></Cell>
+    <Cell><Data ss:Type="String">Tapping cycle, righthand thread, M03 spindle direction, rigid toolholder</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G90</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Absolute programming</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G90</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Fixed cycle, simple cycle, for roughing (Z-axis emphasis)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G91</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Incremental programming</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G92</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Position register (programming of vector from part zero to tool tip)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G92</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Threading cycle, simple cycle</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G94</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Feedrate per minute</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G94</Data></Cell>
+    <Cell><Data ss:Type="String">Fixed cycle, simple cycle, for roughing (X-axis emphasis)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G95</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Feedrate per revolution</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G96</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Constant surface speed (CSS)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G97</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Constant spindle speed</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G98</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Return to initial Z level in canned cycle</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G98</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Feedrate per minute (group type A)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G99</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Return to R level in canned cycle</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">G99</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Feedrate per revolution (group type A)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M00</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Compulsory stop</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M01</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Optional stop</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M02</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">End of program</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M03</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Spindle on (clockwise rotation)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M04</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Spindle on (counterclockwise rotation)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M05</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Spindle stop</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M06</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Automatic tool change (ATC)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M07</Data></Cell>
+    <Cell><Data ss:Type="String">Coolant on (mist)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M08</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Coolant on (flood)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M09</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Coolant off</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M10</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Pallet clamp on</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M11</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Pallet clamp off</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M13</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Spindle on (clockwise rotation) and coolant on (flood)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M19</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Spindle orientation</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M21</Data></Cell>
+    <Cell><Data ss:Type="String">Mirror, X-axis</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M21</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Tailstock forward</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M22</Data></Cell>
+    <Cell><Data ss:Type="String">Mirror, Y-axis</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M22</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Tailstock backward</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M23</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Mirror OFF</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M23</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Thread gradual pullout ON</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M24</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Thread gradual pullout OFF</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M30</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">End of program with return to program top</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M41</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Gear select - gear 1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M42</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Gear select - gear 2</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M43</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Gear select - gear 3</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M44</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Gear select - gear 4</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M48</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Feedrate override allowed</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M49</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Feedrate override NOT allowed</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M52</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Unload Last tool from spindle</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M60</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Automatic pallet change (APC)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M98</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Subprogram call</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">M99</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Subprogram end</Data></Cell>
+   </Row>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+    <Header x:Margin="0.3"/>
+    <Footer x:Margin="0.3"/>
+    <PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>
+   </PageSetup>
+   <Unsynced/>
+   <Print>
+    <ValidPrinterInfo/>
+    <PaperSizeIndex>9</PaperSizeIndex>
+    <HorizontalResolution>600</HorizontalResolution>
+    <VerticalResolution>600</VerticalResolution>
+   </Print>
+   <Selected/>
+   <Panes>
+    <Pane>
+     <Number>3</Number>
+     <ActiveRow>9</ActiveRow>
+     <ActiveCol>1</ActiveCol>
+    </Pane>
+   </Panes>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+ <Worksheet ss:Name="Sheet2">
+  <Table ss:ExpandedColumnCount="1" ss:ExpandedRowCount="1" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultRowHeight="15">
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+    <Header x:Margin="0.3"/>
+    <Footer x:Margin="0.3"/>
+    <PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>
+   </PageSetup>
+   <Panes>
+    <Pane>
+     <Number>3</Number>
+     <ActiveRow>21</ActiveRow>
+     <ActiveCol>2</ActiveCol>
+    </Pane>
+   </Panes>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+ <Worksheet ss:Name="Sheet3">
+  <Table ss:ExpandedColumnCount="1" ss:ExpandedRowCount="1" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultRowHeight="15">
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+    <Header x:Margin="0.3"/>
+    <Footer x:Margin="0.3"/>
+    <PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>
+   </PageSetup>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+</Workbook>

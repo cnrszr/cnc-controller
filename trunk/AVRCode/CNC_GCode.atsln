@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Atmel Studio Solution File, Format Version 11.00
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "CNC_GCode", "CNC_GCode\CNC_GCode.cproj", "{844B1919-47DC-47CD-8A86-8BC82CF55960}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{844B1919-47DC-47CD-8A86-8BC82CF55960}.Debug|AVR.ActiveCfg = Debug|AVR
+		{844B1919-47DC-47CD-8A86-8BC82CF55960}.Debug|AVR.Build.0 = Debug|AVR
+		{844B1919-47DC-47CD-8A86-8BC82CF55960}.Release|AVR.ActiveCfg = Release|AVR
+		{844B1919-47DC-47CD-8A86-8BC82CF55960}.Release|AVR.Build.0 = Release|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
