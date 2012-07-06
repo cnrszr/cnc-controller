@@ -49,7 +49,6 @@ void Init(void)
 	recieved = 65;
 	RevOrStep = 0;
 	Pointer = 0;
-	Buffer[0] = 'A';
 }
 void USART_Init (unsigned int ubrr)
 {
