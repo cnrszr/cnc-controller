@@ -12,3 +12,5 @@ C:\Users\hslovett\Documents\Programming\CSharp\CNC_GCode\CNC_GCode\obj\x86\Debug
 C:\Users\hslovett\Documents\Programming\CSharp\CNC_GCode\CNC_GCode\obj\x86\Debug\CNC_GCode.Main.resources
 C:\Users\hslovett\Documents\Programming\CSharp\CNC_GCode\CNC_GCode\obj\x86\Debug\CNC_GCode.CalibrationPane.resources
 C:\Users\hslovett\Documents\Programming\CSharp\CNC_GCode\CNC_GCode\obj\x86\Debug\CNC_GCode.UserRequest.resources
+C:\Users\hslovett\Documents\Projects\cnc-controller\Desktop_Program\CNC_GCode\obj\x86\Debug\CNC_GCode.exe
+C:\Users\hslovett\Documents\Projects\cnc-controller\Desktop_Program\CNC_GCode\obj\x86\Debug\CNC_GCode.pdb
