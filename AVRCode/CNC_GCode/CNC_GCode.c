@@ -5,13 +5,13 @@
  *  Author: hslovett
  */ 
 
-#define F_CPU 8000000
+#define F_CPU 12000000
 
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
-#define SPEED 9600
+#define SPEED 57600
 #define MYUBBR F_CPU/16/SPEED-1
 
 #define MOTOR1 PB0
@@ -86,7 +86,7 @@ ISR(USART_RX_vect) //trigger interrupt when uart1 receives data   USART_RXC1_vec
 	recieved = UDR0; // Fetch the recieved byte value into the variable "ByteReceived" 
 /*	hasrecieved = 65;*/
 // 	USART_Transmit('k');
-	USART_Transmit('K');
+	//USART_Transmit('K');
 /*		USART_Transmit(recieved);*/
 	}
 void StepUp(void)

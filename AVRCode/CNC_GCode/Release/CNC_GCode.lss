@@ -176,8 +176,8 @@ Disassembly of section .text:
  168:	f1 e0       	ldi	r31, 0x01	; 1
  16a:	81 91       	ld	r24, Z+
  16c:	85 b9       	out	0x05, r24	; 5
- 16e:	8f e6       	ldi	r24, 0x6F	; 111
- 170:	97 e1       	ldi	r25, 0x17	; 23
+ 16e:	87 e2       	ldi	r24, 0x27	; 39
+ 170:	93 e2       	ldi	r25, 0x23	; 35
  172:	01 97       	sbiw	r24, 0x01	; 1
  174:	f1 f7       	brne	.-4      	; 0x172 <StepUp+0xc>
  176:	00 c0       	rjmp	.+0      	; 0x178 <StepUp+0x12>
@@ -193,8 +193,8 @@ Disassembly of section .text:
  186:	f1 e0       	ldi	r31, 0x01	; 1
  188:	82 91       	ld	r24, -Z
  18a:	85 b9       	out	0x05, r24	; 5
- 18c:	8f e6       	ldi	r24, 0x6F	; 111
- 18e:	97 e1       	ldi	r25, 0x17	; 23
+ 18c:	87 e2       	ldi	r24, 0x27	; 39
+ 18e:	93 e2       	ldi	r25, 0x23	; 35
  190:	01 97       	sbiw	r24, 0x01	; 1
  192:	f1 f7       	brne	.-4      	; 0x190 <StepDown+0xc>
  194:	00 c0       	rjmp	.+0      	; 0x196 <StepDown+0x12>
@@ -211,8 +211,8 @@ Disassembly of section .text:
  1a6:	0e c0       	rjmp	.+28     	; 0x1c4 <RevDown+0x22>
  1a8:	22 91       	ld	r18, -Z
  1aa:	25 b9       	out	0x05, r18	; 5
- 1ac:	af e6       	ldi	r26, 0x6F	; 111
- 1ae:	b7 e1       	ldi	r27, 0x17	; 23
+ 1ac:	a7 e2       	ldi	r26, 0x27	; 39
+ 1ae:	b3 e2       	ldi	r27, 0x23	; 35
  1b0:	11 97       	sbiw	r26, 0x01	; 1
  1b2:	f1 f7       	brne	.-4      	; 0x1b0 <RevDown+0xe>
  1b4:	00 c0       	rjmp	.+0      	; 0x1b6 <RevDown+0x14>
@@ -234,8 +234,8 @@ Disassembly of section .text:
  1d0:	0e c0       	rjmp	.+28     	; 0x1ee <RevUp+0x22>
  1d2:	21 91       	ld	r18, Z+
  1d4:	25 b9       	out	0x05, r18	; 5
- 1d6:	af e6       	ldi	r26, 0x6F	; 111
- 1d8:	b7 e1       	ldi	r27, 0x17	; 23
+ 1d6:	a7 e2       	ldi	r26, 0x27	; 39
+ 1d8:	b3 e2       	ldi	r27, 0x23	; 35
  1da:	11 97       	sbiw	r26, 0x01	; 1
  1dc:	f1 f7       	brne	.-4      	; 0x1da <RevUp+0xe>
  1de:	00 c0       	rjmp	.+0      	; 0x1e0 <RevUp+0x14>
@@ -351,7 +351,7 @@ Disassembly of section .text:
  2e4:	0f 93       	push	r16
  2e6:	1f 93       	push	r17
  2e8:	0e 94 53 00 	call	0xa6	; 0xa6 <Init>
- 2ec:	83 e3       	ldi	r24, 0x33	; 51
+ 2ec:	8c e0       	ldi	r24, 0x0C	; 12
  2ee:	90 e0       	ldi	r25, 0x00	; 0
  2f0:	0e 94 6d 00 	call	0xda	; 0xda <USART_Init>
  2f4:	78 94       	sei
