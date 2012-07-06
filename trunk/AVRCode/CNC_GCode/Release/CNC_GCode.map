@@ -11,12 +11,9 @@ Allocating common symbols
 Common symbol       size              file
 
 recieved            0x1               CNC_GCode.o
-NumSteps            0x1               CNC_GCode.o
-Y                   0x2               CNC_GCode.o
-hasrecieved         0x1               CNC_GCode.o
 RevOrStep           0x1               CNC_GCode.o
-Z                   0x2               CNC_GCode.o
-X                   0x2               CNC_GCode.o
+Buffer              0x1e              CNC_GCode.o
+Pointer             0x1               CNC_GCode.o
 
 Memory Configuration
 
@@ -131,7 +128,7 @@ LOAD c:/program files (x86)/atmel/atmel studio 6.0/extensions/atmel/avrgcc/3.3.2
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x37c
+.text           0x00000000      0x3aa
  *(.vectors)
  .vectors       0x00000000       0x68 c:/program files (x86)/atmel/atmel studio 6.0/extensions/atmel/avrgcc/3.3.2.31/avrtoolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5/crtm168.o
                 0x00000000                __vector_default
@@ -212,36 +209,37 @@ LOAD c:/program files (x86)/atmel/atmel studio 6.0/extensions/atmel/avrgcc/3.3.2
                 0x000000a2                __vector_10
                 0x000000a2                __vector_16
                 0x000000a2                __vector_20
- .text          0x000000a6      0x2d2 CNC_GCode.o
+ .text          0x000000a6      0x300 CNC_GCode.o
                 0x000000a6                Init
-                0x000000da                USART_Init
-                0x000000f8                USART_Transmit
-                0x00000106                USART_Receive
-                0x00000114                __vector_18
-                0x00000166                StepUp
-                0x00000184                StepDown
-                0x000001a2                RevDown
-                0x000001cc                RevUp
-                0x000001f6                XStepDown
-                0x00000220                XStepUp
-                0x00000250                YStepUp
-                0x0000026c                YStepDown
-                0x0000029a                ZStepUp
-                0x000002b6                ZStepDown
-                0x000002e4                main
- .text          0x00000378        0x0 c:/program files (x86)/atmel/atmel studio 6.0/extensions/atmel/avrgcc/3.3.2.31/avrtoolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
- .text          0x00000378        0x0 c:/program files (x86)/atmel/atmel studio 6.0/extensions/atmel/avrgcc/3.3.2.31/avrtoolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_copy_data.o)
- .text          0x00000378        0x0 c:/program files (x86)/atmel/atmel studio 6.0/extensions/atmel/avrgcc/3.3.2.31/avrtoolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_clear_bss.o)
-                0x00000378                . = ALIGN (0x2)
+                0x000000c4                USART_Init
+                0x000000e2                USART_Transmit
+                0x000000f0                USART_Receive
+                0x000000fe                StepUp
+                0x0000011c                StepDown
+                0x0000013a                RevDown
+                0x00000164                RevUp
+                0x0000018e                XStepDown
+                0x000001a6                XStepUp
+                0x000001c4                YStepUp
+                0x000001e0                YStepDown
+                0x000001fc                ZStepUp
+                0x00000218                ZStepDown
+                0x00000234                MillBuffer
+                0x000002ce                __vector_18
+                0x00000342                main
+ .text          0x000003a6        0x0 c:/program files (x86)/atmel/atmel studio 6.0/extensions/atmel/avrgcc/3.3.2.31/avrtoolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
+ .text          0x000003a6        0x0 c:/program files (x86)/atmel/atmel studio 6.0/extensions/atmel/avrgcc/3.3.2.31/avrtoolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_copy_data.o)
+ .text          0x000003a6        0x0 c:/program files (x86)/atmel/atmel studio 6.0/extensions/atmel/avrgcc/3.3.2.31/avrtoolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_clear_bss.o)
+                0x000003a6                . = ALIGN (0x2)
  *(.text.*)
- .text.libgcc   0x00000378        0x0 c:/program files (x86)/atmel/atmel studio 6.0/extensions/atmel/avrgcc/3.3.2.31/avrtoolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
- .text.libgcc   0x00000378        0x0 c:/program files (x86)/atmel/atmel studio 6.0/extensions/atmel/avrgcc/3.3.2.31/avrtoolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_copy_data.o)
- .text.libgcc   0x00000378        0x0 c:/program files (x86)/atmel/atmel studio 6.0/extensions/atmel/avrgcc/3.3.2.31/avrtoolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_clear_bss.o)
-                0x00000378                . = ALIGN (0x2)
+ .text.libgcc   0x000003a6        0x0 c:/program files (x86)/atmel/atmel studio 6.0/extensions/atmel/avrgcc/3.3.2.31/avrtoolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
+ .text.libgcc   0x000003a6        0x0 c:/program files (x86)/atmel/atmel studio 6.0/extensions/atmel/avrgcc/3.3.2.31/avrtoolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_copy_data.o)
+ .text.libgcc   0x000003a6        0x0 c:/program files (x86)/atmel/atmel studio 6.0/extensions/atmel/avrgcc/3.3.2.31/avrtoolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_clear_bss.o)
+                0x000003a6                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00000378        0x0 c:/program files (x86)/atmel/atmel studio 6.0/extensions/atmel/avrgcc/3.3.2.31/avrtoolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
-                0x00000378                _exit
-                0x00000378                exit
+ .fini9         0x000003a6        0x0 c:/program files (x86)/atmel/atmel studio 6.0/extensions/atmel/avrgcc/3.3.2.31/avrtoolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
+                0x000003a6                _exit
+                0x000003a6                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -260,11 +258,11 @@ LOAD c:/program files (x86)/atmel/atmel studio 6.0/extensions/atmel/avrgcc/3.3.2
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00000378        0x4 c:/program files (x86)/atmel/atmel studio 6.0/extensions/atmel/avrgcc/3.3.2.31/avrtoolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
+ .fini0         0x000003a6        0x4 c:/program files (x86)/atmel/atmel studio 6.0/extensions/atmel/avrgcc/3.3.2.31/avrtoolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x0000037c                _etext = .
+                0x000003aa                _etext = .
 
-.data           0x00800100        0x8 load address 0x0000037c
+.data           0x00800100        0x8 load address 0x000003aa
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel studio 6.0/extensions/atmel/avrgcc/3.3.2.31/avrtoolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5/crtm168.o
@@ -281,7 +279,7 @@ LOAD c:/program files (x86)/atmel/atmel studio 6.0/extensions/atmel/avrgcc/3.3.2
                 0x00800108                _edata = .
                 0x00800108                PROVIDE (__data_end, .)
 
-.bss            0x00800108        0xa
+.bss            0x00800108       0x21
                 0x00800108                PROVIDE (__bss_start, .)
  *(.bss)
  .bss           0x00800108        0x0 c:/program files (x86)/atmel/atmel studio 6.0/extensions/atmel/avrgcc/3.3.2.31/avrtoolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5/crtm168.o
@@ -291,24 +289,21 @@ LOAD c:/program files (x86)/atmel/atmel studio 6.0/extensions/atmel/avrgcc/3.3.2
  .bss           0x00800108        0x0 c:/program files (x86)/atmel/atmel studio 6.0/extensions/atmel/avrgcc/3.3.2.31/avrtoolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_clear_bss.o)
  *(.bss*)
  *(COMMON)
- COMMON         0x00800108        0xa CNC_GCode.o
+ COMMON         0x00800108       0x21 CNC_GCode.o
                 0x00800108                recieved
-                0x00800109                NumSteps
-                0x0080010a                Y
-                0x0080010c                hasrecieved
-                0x0080010d                RevOrStep
-                0x0080010e                Z
-                0x00800110                X
-                0x00800112                PROVIDE (__bss_end, .)
-                0x0000037c                __data_load_start = LOADADDR (.data)
-                0x00000384                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00800109                RevOrStep
+                0x0080010a                Buffer
+                0x00800128                Pointer
+                0x00800129                PROVIDE (__bss_end, .)
+                0x000003aa                __data_load_start = LOADADDR (.data)
+                0x000003b2                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800112        0x0
-                0x00800112                PROVIDE (__noinit_start, .)
+.noinit         0x00800129        0x0
+                0x00800129                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x00800112                PROVIDE (__noinit_end, .)
-                0x00800112                _end = .
-                0x00800112                PROVIDE (__heap_start, .)
+                0x00800129                PROVIDE (__noinit_end, .)
+                0x00800129                _end = .
+                0x00800129                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
