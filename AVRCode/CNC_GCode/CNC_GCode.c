@@ -30,13 +30,16 @@
 #define CAL 1
 
 #define DELAY 3
+#define BufferSize 30
+
 char steps[8] = {0x08, 0x0A, 0x02, 0x06, 0x04, 0x05, 0x01, 0x09};
 char recieved;
-char hasrecieved;
-char NumSteps;
-int X, Y, Z;
 uint8_t RevOrStep;
+uint8_t Pointer;
+char Buffer[BufferSize];
 
+// char BeginChar = 'B';
+// char EndChar ='E';
 void Init(void)
 {
 	DDRB = 0xFF; //Set PORTB to outputs
@@ -44,11 +47,9 @@ void Init(void)
 	DDRD = 0x00; //set to inputs. USART overrides D0 and D1
 	PORTD = 0xFF; //set pull up resistors on
 	recieved = 65;
-	hasrecieved = 0;
-	NumSteps = 12;
-	X = 0;
-	Y = 0;
-	Z = 0;
+	RevOrStep = 0;
+	Pointer = 0;
+	Buffer[0] = 'A';
 }
 void USART_Init (unsigned int ubrr)
 {
@@ -79,16 +80,7 @@ unsigned char USART_Receive( void )
 	/* Get and return received data from buffer */
 	return UDR0;
 }
-ISR(USART_RX_vect) //trigger interrupt when uart1 receives data   USART_RXC1_vect
-	{ 
-	// Code to be executed when the USART receives a byte here
 
-	recieved = UDR0; // Fetch the recieved byte value into the variable "ByteReceived" 
-/*	hasrecieved = 65;*/
-// 	USART_Transmit('k');
-	//USART_Transmit('K');
-/*		USART_Transmit(recieved);*/
-	}
 void StepUp(void)
 {
 	//PORTB = 0x05;
@@ -133,7 +125,6 @@ void XStepDown(void)//if the passed value is greater than 1, the x will step up
 {
 	//PORTD = 0x04;
 	//PORTB = steps[0];	
-	X++;
 	PORTC |= (1<<X_EN); //enable the x movement
 	if(RevOrStep == 0)
 	{
@@ -148,7 +139,6 @@ void XStepDown(void)//if the passed value is greater than 1, the x will step up
 }
 void XStepUp(void)
 {
-	X --;
 	PORTB = steps[7];
 	PORTC |= (1<<X_EN); //enable the x movement
 	if(RevOrStep == 0)
@@ -189,7 +179,7 @@ void YStepDown(void)
 		StepDown();
 	}	
 	PORTC &= ~(1<<Y_EN); //disable y
-	Y--;
+
 }
 void ZStepUp(void)//if the passed value is greater than 1, the x will step up
 {
@@ -218,157 +208,123 @@ void ZStepDown(void)
 		StepDown();
 	}	
 	PORTC &= ~(1<<Z_EN); //disable z
-	Z--;
-}
 
+}
+void MillBuffer(void)
+{
+	for(int i = 0; i < BufferSize; i ++)
+	{
+		if(recieved == 'Q')//escape clause
+			i = BufferSize;
+		else
+		{
+			switch(Buffer[i])
+			{
+				case 'x': //xdown
+					XStepDown();
+					break;
+				
+				case 'X': //x up
+					XStepUp();
+					break;
+				
+				case 'y': //y down
+					YStepDown();
+					break;
+				
+				case 'Y': //y up
+					YStepUp();
+					break;
+				
+				case 'z': //z down
+					ZStepDown();
+					break;
+				
+				case 'Z': //z up
+					ZStepUp();
+					break;
+			
+				case 'R': //set to do 1 full revolution
+					RevOrStep = 0;
+					break;
+				
+				case 'S': //set to do one step (1/12th revolution)
+					RevOrStep = 1;
+					break;
+				
+				case 'E':
+					i = BufferSize;
+					break;
+				
+				default:
+					RevOrStep = RevOrStep;
+					break;
+			}
+		}		
+	}
+	
+	
+}
+ISR(USART_RX_vect) //trigger interrupt when uart1 receives data   USART_RXC1_vect
+{ 
+// Code to be executed when the USART receives a byte here
+	recieved = UDR0; // Fetch the recieved byte value into the variable "ByteReceived" 
+	if(recieved == 'G')
+	{
+		recieved = recieved;//do nothing, doesn't want to be added into the buffer
+	}
+	else 
+	{
+		Buffer[Pointer] = recieved;
+		Pointer++;
+		if(Pointer == BufferSize)
+		{
+			Pointer = 0;
+			sei();//re-enable interrupts so USART will still work
+			MillBuffer();
+		}
+	}
+}
 int main(void)
 {
 	Init();
 	USART_Init(MYUBBR); //initialise UART 
 	sei(); //turn global interrupts on
 	RevOrStep = 0;
-	uint8_t State = CAL;
-	//uint8_t calCheck;
-	
-	//while(State != NOOP) //initial calibration MUST Occur. 
-	//{
-		//calCheck = PIND; //read data
-		//calCheck = calCheck >> 0x02;//shift
-		//calCheck &= 0x03;//remove unwanted data
-		//
-		//switch (calCheck)
-		//{
-			//case 0: //neither are active
-				//XStepDown();
-				//YStepDown();
-				//break;
-						//
-			//case 1: //x is on, y is off
-				//YStepDown();
-				//break;
-					//
-			//case 2: //y is on, x is off
-				//XStepDown();
-				//break;
-						//
-			//case 3: //both on, calibrate complete
-				//State = NOOP;
-				//USART_Transmit('C');
-				//recieved = ' ';
-				//break;
-						//
-			//default://for completion and debugging
-				//USART_Transmit((char)calCheck);
-				//break;
-		//}
-	//}	
 	
     while(1)
     {
-		switch(recieved)
+		//USART_Transmit('0');
+		if(recieved == 'B')
 		{
-			case 'x': //xdown
-				XStepDown();
-				USART_Transmit('D');
-				recieved = ' ';
-				break;
-				
-			case 'X': //x up
-				XStepUp();
-				USART_Transmit('D');
-				recieved = ' ';
-				break;
-				
-			case 'y': //y down
-				YStepDown();
-				USART_Transmit('D');
-				recieved = ' ';
-				break;
-				
-			case 'Y': //y up
-				YStepUp();
-				USART_Transmit('D');
-				recieved = ' ';
-				break;
-				
-			case 'z': //z down
-				ZStepDown();
-				USART_Transmit('D');
-				recieved = ' ';
-				break;
-				
-			case 'Z': //z up
-				ZStepUp();
-				USART_Transmit('D');
-				recieved = ' ';
-				break;
-			
-			case 'R': //set to do 1 full revolution
-				RevOrStep = 0;
-				break;
-				
-			case 'S': //set to do one step (1/12th revolution)
-				RevOrStep = 1;
-				break;
-			
-			case 'O': //make machine go to machine Origin
-				State = CAL;
-				break;
-				
-			case 'E': //escape clause
-				State = NOOP;
-				break;
-				
-			default:
-				recieved = recieved;
-				break;
+			//USART_Transmit('Q');
+			recieved = ' ';
+			Pointer = 0;
+			for(uint8_t i = 0; i < BufferSize; i++)
+			{
+				Buffer[i] = '.';
+			}
 		}
-		
-		//states used for anything over 1 instruction
-// 		switch (State)
-// 		{
-// 			case NOOP: //just listen on UART
-// 				State = NOOP;
-// // 				if((PIND |= ~(1<<X0)) == 0xFF)
-// // 				{
-// // 					USART_Transmit('Q');
-// // 				}
-// 				break;
-// 				
-//  			case CAL://return to Machine 0
-// 				calCheck = PIND; //read data
-// 				calCheck = calCheck >> 0x02;//shift
-// 				calCheck &= 0x03;//remove unwanted data
-// 				switch (calCheck)
-// 				{
-// 					case 0: //neither are active
-// 						XStepDown();
-// 						YStepDown();
-// 						break;
-// 						
-// 					case 1: //x is on, y is off
-// 						YStepDown();
-// 						break;
-// 					
-// 					case 2: //y is on, x is off
-// 						XStepDown();
-// 						break;
-// 						
-// 					case 3: //both on, calibrate complete
-// 						State = NOOP;
-// 						USART_Transmit('C');
-// 						recieved = ' ';
-// 						break;
-// 						
-// 					default:
-// 						State = NOOP;
-// 						USART_Transmit((char)calCheck);
-// 						break;
-// 				}
-// 
-// 			default: 
-// 				State = NOOP;
-// 				break;
-		//}
+		else if(recieved == 'E')
+		{
+			//USART_Transmit('q');
+			MillBuffer();
+			recieved = ' ';
+			
+		}
+		else if(recieved == 'G')
+		{
+			for(int i = 0; i < BufferSize; i ++)
+			{
+				USART_Transmit(Buffer[i]); //transmit the entire buffer back
+			}
+			recieved = ' ';
+		}
+		else
+		{
+			recieved = recieved;
+			
+			
+		}
 	}
 }
