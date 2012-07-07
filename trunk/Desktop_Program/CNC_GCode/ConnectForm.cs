@@ -31,7 +31,7 @@ namespace CNC_GCode
 
             comboBox_Port.DataSource = SerialPort.GetPortNames(); //populate all connected ports
             
-            comboBox_BaudRate.SelectedIndex = 5;
+            comboBox_BaudRate.SelectedIndex = 10;
             comboBox_DataBits.SelectedIndex = 1;
             comboBox_Parity.SelectedIndex = 0;
             comboBox_StopBits.SelectedIndex = 1;

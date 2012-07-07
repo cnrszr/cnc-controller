@@ -261,7 +261,7 @@ void MillBuffer(void)
 			}
 		}		
 	}
-	
+	USART_Transmit('D');
 	
 }
 ISR(USART_RX_vect) //trigger interrupt when uart1 receives data   USART_RXC1_vect

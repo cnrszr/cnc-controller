@@ -158,11 +158,9 @@ namespace CNC_GCode
             FilePath = File;
             StreamReader sr = new StreamReader(FilePath);
             string Line = sr.ReadLine();
-            while (true)
+            while (!sr.EndOfStream)
             {
                 Commands.Add(Line);
-                if (sr.EndOfStream)
-                    break;
                 Line = sr.ReadLine();
             }
             
@@ -243,13 +241,18 @@ namespace CNC_GCode
         }
         public override string ToString()
         {
-            string ToString = "";
-            foreach (string s in Commands)
+            string s = "";
+            //foreach (string s in Commands)
+            //{
+            //    ToString += s.ToString();
+            //    ToString += "\n";
+            //}
+            for (int i = 0; i < Commands.Count; i++)
             {
-                ToString += s.ToString();
-                ToString += "\n";
+                s += Commands[i].ToString();
+                s += "\n";
             }
-            return ToString;
+            return s;
         }
         public static string GetInfo(string Code)
         {
