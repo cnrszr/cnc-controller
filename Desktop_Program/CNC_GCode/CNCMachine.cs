@@ -5,6 +5,7 @@ using System.Text;
 using System.IO.Ports;
 using System.Windows.Forms;
 using System.IO;
+using System.Threading;
 
 namespace CNC_GCode
 {
@@ -14,7 +15,7 @@ namespace CNC_GCode
 
         private SerialPort UART;
         private ConnectForm c;
-        private Timer MillTimer;
+        private System.Windows.Forms.Timer MillTimer;
         private bool DReceived { get; set; }
         private string MillString { get; set; }
         private int StringCounter { get; set; }
@@ -32,6 +33,7 @@ namespace CNC_GCode
         public double Drill_X { get; private set; }
         public double Drill_Y { get; private set; }
         public double Drill_Z { get; private set; }
+        private static int BufferSize = 30;
         private StreamWriter sw;
         private static string LogFile = @".\CNClog" + DateTime.Now.Day.ToString() + "_" + DateTime.Now.Month.ToString() + "_" + DateTime.Now.Year.ToString() +"_"+ DateTime.Now.Hour.ToString() + DateTime.Now.Minute.ToString() + ".txt";
         public CNCMachine()
@@ -40,130 +42,75 @@ namespace CNC_GCode
             UART.DataReceived += new SerialDataReceivedEventHandler(UART_DataReceived);
             DataReceived = "";
             Calibrated = false;
-            MillTimer = new Timer();
+            MillTimer = new System.Windows.Forms.Timer();
             MillTimer.Interval = 100;
             MillTimer.Tick += new EventHandler(MillTimer_Tick);
             sw = new StreamWriter(LogFile);
             sw.WriteLine("CNC Machine Opened at " + DateTime.Now.ToString());
             sw.Close();
+            
         }
 
         void MillTimer_Tick(object sender, EventArgs e)
         {
-            if (!StringMillComplete) //if we have a string to cut
+            try
             {
-                if (StringCounter == MillString.Length)//and at the end of the string
+                switch (GCode.GetCode(gCode[GlobalCounter]))
                 {
-                    StringMillComplete = true;//get next string
-                    StringCounter = 0;
-                    
-                }
-                else if (DReceived) //cutting string, need to wait for a 'D' to have been received to cut the next part;
-                {
-                    DReceived = false;
-                    //SendUART(MillString[StringCounter]);//this works but doesn't force an increment of the location
-                    switch (MillString[StringCounter])
-                    {
-                        case 'x':
-                            XDown();
-                            break;
-                        case 'X':
-                            XUp();
-                            break;
-                        case 'y':
-                            YDown();
-                            break;
-                        case 'Y':
-                            YUp();
-                            break;
-                        case 'z':
-                            ZDown();
-                            break;
-                        case 'Z':
-                            ZUp();
-                            break;
-                        case 'R':
-                            SetToRevolution();
-                            DReceived = true;//over ride as R's don't return Ds
-                            break;
-                        case 'S':
-                            SetToStep();
-                            DReceived = true;//over ride as S's don't return Ds
-                            break;
-                        default:
-                            Log("Unexpected Exit due to unsupported command: " + MillString[StringCounter].ToString());
-                            throw new Exception("Machine Command " +MillString[StringCounter].ToString() + " not Supported");
-                    }
-                    StringCounter++;
-                }
-                else//check to see if a 'D' has been receievd. 
-                {
-                    if (DataReceived[DataReceived.Length - 1] == 'D')
-                        DReceived = true;
+                    case "G00"://Rapid Move
+                        Log("Rapid Move");
+                        G00 g = new G00(gCode[GlobalCounter++]);
+                        MillString = g.MachineCodeFromLocation(Drill_X, Drill_Y, Drill_Z);
+                        CutString(MillString);
+                        break;
+
+                    case "G01"://Liner Interpolation INCOMPLETE
+
+                        G01 g1 = new G01(gCode[GlobalCounter++]);
+                        MillString = g1.MachineCodeFromLocation(Drill_X, Drill_Y, Drill_Z);
+                        CutString(MillString);
+                        break;
+
+                    case "G04": //Dwell - implement a wait. NOT CORRECTLY WORKING DISABLED FOR NOW
+                        //G04 g4 = new G04(gCode[GlobalCounter++]);
+                        //Log("Wait for " + g4.Wait.ToString() + " milliseconds");
+                        //System.Threading.Thread.Sleep(g4.Wait);
+                        GlobalCounter++;
+                        break;
+
+                    case "G21": //Programming in Millimeters
+                        Log("Programming In Millimeters");
+                        GlobalCounter++;
+                        break;
+
+                    case "G90": //Absoulte Programming
+                        Log("Absolute Programming");
+                        GlobalCounter++;
+                        break;
+
+                    case "M03": //Spindle On, Clockwise
+                        //UserRequest.ShowDialog("Please turn the spindle on.");
+                        //Need to implement a wait for okay button pressed style effect
+                        GlobalCounter++;
+                        break;
+
+                    case "M05": //Spindle Off
+                        //UserRequest.ShowDialog("Please turn the spindle off.");
+                        GlobalCounter++;
+                        break;
+
+                    default:
+                        Log("OpCode " + GCode.GetCode(gCode[GlobalCounter]) + " not supported");
+                        throw new NotSupportedException("OpCode " + GCode.GetCode(gCode[GlobalCounter]) + " not supported");
+
                 }
             }
-            else
+            catch (Exception ex)
             {
-                try
-                {
-                    switch (GCode.GetCode(gCode[GlobalCounter]))
-                    {
-                        case "G00"://Rapid Move
-                            Log("Rapid Move");
-                            G00 g = new G00(gCode[GlobalCounter++]);
-                            MillString = g.MachineCodeFromLocation(Drill_X, Drill_Y, Drill_Z);
-                            StringMillComplete = false;//we have a string to cut
-                            DReceived = true;//force first start
-                            break;
-
-                        case "G01"://Liner Interpolation INCOMPLETE
-                            
-                            G01 g1 = new G01(gCode[GlobalCounter++]);
-                            MillString = g1.MachineCodeFromLocation(Drill_X, Drill_Y, Drill_Z);
-                            StringMillComplete = false;
-                            DReceived = true;
-                            break;
-
-                        case "G04": //Dwell - implement a wait. NOT CORRECTLY WORKING DISABLED FOR NOW
-                            //G04 g4 = new G04(gCode[GlobalCounter++]);
-                            //Log("Wait for " + g4.Wait.ToString() + " milliseconds");
-                            //System.Threading.Thread.Sleep(g4.Wait);
-                            GlobalCounter++;
-                            break;
-
-                        case "G21": //Programming in Millimeters
-                            Log("Programming In Millimeters");
-                            GlobalCounter++;
-                            break;
-
-                        case "G90": //Absoulte Programming
-                            Log("Absolute Programming");
-                            GlobalCounter++;
-                            break;
-
-                        case "M03": //Spindle On, Clockwise
-                            //UserRequest.ShowDialog("Please turn the spindle on.");
-                            //Need to implement a wait for okay button pressed style effect
-                            GlobalCounter++;
-                            break;
-
-                        case "M05": //Spindle Off
-                            //UserRequest.ShowDialog("Please turn the spindle off.");
-                            GlobalCounter++;
-                            break;
-
-                        default:
-                            Log("OpCode " + GCode.GetCode(gCode[GlobalCounter]) + " not supported");
-                            throw new NotSupportedException("OpCode " + GCode.GetCode(gCode[GlobalCounter]) + " not supported");
-
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MillTimer.Dispose();
-                    Log(ex.Message);
-                }
+                MillTimer.Dispose();
+                Log(ex.Message);
             }
+
 
             if ((GlobalCounter == GlobalMaximum) && StringMillComplete)//if we're on the last command and we've cut it out, finish
             {
@@ -174,6 +121,51 @@ namespace CNC_GCode
             }
         }
 
+        void CutString(string s)
+        {
+            SendUART('B');//reset Buffer
+            //int TimeOut = 0;
+
+            while (s.Length >= BufferSize)
+            {
+                DataReceived = " ";
+                for (int i = 0; i < BufferSize; i++)
+                {
+                    SendUART(s[i]); //fill the buffer with data
+                }
+                while (!(DataReceived[DataReceived.Length - 1] == 'D'))
+                {
+                    //TimeOut++;
+                    Thread.Sleep(10);
+
+                    //if (TimeOut == 60000)
+                    //    throw new TimeoutException();
+                }
+                string temp = "";
+                for (int i = 30; i < s.Length; i++)
+                {
+                    temp += s[i];
+                }
+                s = temp;
+            }
+
+            DataReceived = " ";
+            SendUART('B');
+            for (int i = 0; i < s.Length; i++)
+            {
+                SendUART(s[i]);
+            }
+            SendUART('E');
+            while (!(DataReceived[DataReceived.Length - 1] == 'D'))
+            {
+                //TimeOut++;
+                Thread.Sleep(10);
+
+                //if (TimeOut == 1000)
+                //    throw new TimeoutException();
+            }
+        }
+        
         void UART_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             SerialPort sp = (SerialPort)sender;
@@ -189,6 +181,7 @@ namespace CNC_GCode
             c.Show();
             c.Activate();
             Log("UART Open");
+            
         }
 
         public void CloseUart()
@@ -215,6 +208,8 @@ namespace CNC_GCode
 
             if (!UART.IsOpen)
                 throw new Exception("UART Error");
+
+            SetToRevolution();
         }
 
         private void SendUART(char c)
@@ -224,77 +219,124 @@ namespace CNC_GCode
 
             UART.Write(c.ToString());
             Log("Data Sent: " + c.ToString());
+            switch (c)
+            {
+                case 'x':
+                    if (StepOrRevolution)
+                    {
+                        Drill_X -= MillimetersPerStep;
+                    }
+                    else
+                    {
+                        Drill_X -= MillimetersPerRevolution;
+                    }
+                    break;
+
+                case 'X':
+                    if (StepOrRevolution)
+                    {
+                        Drill_X += MillimetersPerStep;
+                    }
+                    else
+                    {
+                        Drill_X += MillimetersPerRevolution;
+                    }
+                    break;
+
+                case 'y':
+                    if (StepOrRevolution)
+                    {
+                        Drill_Y -= MillimetersPerStep;
+                    }
+                    else
+                    {
+                        Drill_Y -= MillimetersPerRevolution;
+                    }
+                    break;
+
+                case 'Y':
+                    if (StepOrRevolution)
+                    {
+                        Drill_Y += MillimetersPerStep;
+                    }
+                    else
+                    {
+                        Drill_Y += MillimetersPerRevolution;
+                    }
+                    break;
+
+                case 'z':
+                    if (StepOrRevolution)
+                    {
+                        Drill_Z -= MillimetersPerStep;
+                    }
+                    else
+                    {
+                        Drill_Z -= MillimetersPerRevolution;
+                    }
+                    break;
+
+                case 'Z':
+                    if (StepOrRevolution)
+                    {
+                        Drill_Z += MillimetersPerStep;
+                    }
+                    else
+                    {
+                        Drill_Z += MillimetersPerRevolution;
+                    }
+                    break;
+
+                case 'S':
+                    StepOrRevolution = true;
+                    break;
+
+                case 'R':
+                    StepOrRevolution = false;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        private void SendUART(string s)
+        {
+            for (int i = 0; i < s.Length; i++)
+            {
+                SendUART(s[i]);
+            }
+            Log("Data Sent: " + s.ToString());
         }
 
         public void XUp()
         {
-            SendUART('X');
-            if (StepOrRevolution)
-            {
-                Drill_X += MillimetersPerStep;
-            }
-            else
-            {
-                Drill_X += MillimetersPerRevolution;
-            }
+            SendUART("BXE");
         }
 
         public void XDown()
         {
-            SendUART('x');
-            if (StepOrRevolution)
-            {
-                Drill_X -= MillimetersPerStep;
-            }
-            else
-            {
-                Drill_X -= MillimetersPerRevolution;
-            }
-            
+            SendUART("BxE");            
         }
 
         public void YUp()
         {
-            SendUART('Y');
-            if (StepOrRevolution)
-            {
-                Drill_Y += MillimetersPerStep;
-            }
-            else
-            {
-                Drill_Y += MillimetersPerRevolution;
-            }
+            SendUART("BYE");
         }
 
         public void YDown()
         {
-            SendUART('y');
-            if (StepOrRevolution)
-            {
-                Drill_Y -= MillimetersPerStep;
-            }
-            else
-            {
-                Drill_Y -= MillimetersPerRevolution;
-            }
+            SendUART("ByE");
         }
 
         public void ZUp()
         {
-            SendUART('Z');
-            if (StepOrRevolution)
-            {
-                Drill_Z += MillimetersPerStep;
-            }
-            else
-            {
-                Drill_Z += MillimetersPerRevolution;
-            }
+            SendUART("BZE");
         }
 
         public void ZDown()
         {
-            SendUART('z');
+            SendUART("BzE");
             if (StepOrRevolution)
             {
                 Drill_Z -= MillimetersPerStep;
@@ -334,13 +376,13 @@ namespace CNC_GCode
 
         public void SetToStep()
         {
-            SendUART('S');
+            SendUART("BSE");
             StepOrRevolution = true;
         }
 
         public void SetToRevolution()
         {
-            SendUART('R');
+            SendUART("BRE");
             StepOrRevolution = false;
         }
 
