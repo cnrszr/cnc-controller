@@ -45,6 +45,7 @@ SUBDIRS :=
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
 ../CNC_644.c \
+../STEPPER.c \
 ../UART.c
 
 
@@ -56,21 +57,25 @@ ASM_SRCS +=
 
 OBJS +=  \
 CNC_644.o \
+STEPPER.o \
 UART.o
 
 
 OBJS_AS_ARGS +=  \
 CNC_644.o \
+STEPPER.o \
 UART.o
 
 
 C_DEPS +=  \
 CNC_644.d \
+STEPPER.d \
 UART.d
 
 
 C_DEPS_AS_ARGS +=  \
 CNC_644.d \
+STEPPER.d \
 UART.d
 
 
@@ -101,6 +106,8 @@ ADDITIONAL_DEPENDENCIES:= $(HEX_FLASH_FILE_PATH) $(LSS_FILE_PATH) $(HEX_EEPROM_F
 OUTPUT_FILE_DEP:= ./makedep.mk
 
 # AVR/GNU C Compiler
+
+
 
 
 
