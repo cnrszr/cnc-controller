@@ -64,6 +64,15 @@
     <Compile Include="CNC_644.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Pin_Definitions.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="STEPPER.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="STEPPER.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="UART.c">
       <SubType>compile</SubType>
     </Compile>
