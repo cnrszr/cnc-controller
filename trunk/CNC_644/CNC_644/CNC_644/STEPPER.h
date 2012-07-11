@@ -27,4 +27,6 @@ void MoveSteps(unsigned int NumSteps);
 //Method to Step on step down: Not publicly available
 //void StepDown(void);
 
+void StartTimer(void);
+void StopTimer(void);
 #endif /* STEPPER_H_ */
