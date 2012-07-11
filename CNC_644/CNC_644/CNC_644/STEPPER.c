@@ -19,10 +19,10 @@
 uint8_t STATE;
 //Local Variables
 uint8_t StepPoint;
-unsigned int ACCEL;
-unsigned int DECEL;
-unsigned int MAX_SPEED;
-unsigned int NUM_STEPS;
+uint8_t ACCEL;
+uint8_t DECEL;
+uint8_t MAX_SPEED;
+uint8_t NUM_STEPS;
 
 //Constants
 uint8_t StepsPerRound = 96;
@@ -72,18 +72,31 @@ void SetUpCalculations(void)
 //Timer Interrupt
 ISR(TIMER0_COMPA_vect)
 {
+// 	PORTD = 0xFF;
+// 	_delay_ms(1);
+// 	PORTD = 0x00;
+	PORTB |= (1<<MotorEN);
+	StepUp(); //step up each time overflow occurs
 	switch(STATE)
 	{
 		case STOP:
+			PORTB &= ~(1<<MotorEN); //disable motor.
+			TCCR0B = 0x00;//stop timer.
 			break;
 			
 		case ACCELERATE:
+			OCR0A--;
+			if(OCR0A == 14)
+				STATE = RUN;
 			break;
 			
 		case RUN:
 			break;
 			
 		case DECELERATE:
+			OCR0A ++;
+			if(OCR0A == 255)
+				STATE = STOP;
 			break;
 			
 		default:
@@ -93,7 +106,21 @@ ISR(TIMER0_COMPA_vect)
 	
 }
 
-unsigned int C0(void)
+// unsigned int C0(void)
+// {
+// 	
+// }
+
+void StartTimer(void)
 {
-	
+	TCCR0A |= (1<<WGM01);//Clear timer on compare - variable overflow.
+	TCCR0B |= (1<<CS02)|(1<<CS00); //prescaler to 1024
+	OCR0A = 0xFF;//Timer compare
+	TIMSK0 |= (1<<OCIE0A); //enable interrupt on compare. 
+	STATE = ACCELERATE;
+}
+
+void StopTimer(void)
+{
+	STATE = DECELERATE; //set the state - if the timer is running it will close itself. 
 }

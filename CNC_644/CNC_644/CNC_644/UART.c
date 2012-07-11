@@ -8,7 +8,11 @@
  #include "UART.h"
  #include <avr/io.h>
  #include <avr/interrupt.h>
- 
+ #include <avr/eeprom.h>
+
+ uint8_t Pointer;
+ uint8_t PointerMax;
+ //uint8_t LastReceived;
 void USART_Init (unsigned int ubrr)
 {
 	//Set baud rate
@@ -20,6 +24,7 @@ void USART_Init (unsigned int ubrr)
 	UCSR0C = (1<<UCSZ00)|(1<<UCSZ01); //set asynchronous, no parity, one stop bit, 8 bit transfer.
 	
 	UCSR0B |= (1 << RXCIE0); //set RX interrupt on
+	Received = ' ';
 	
 }
 void USART_Transmit( unsigned char data )
@@ -38,9 +43,23 @@ unsigned char USART_Receive( void )
 	/* Get and return received data from buffer */
 	return UDR0;
 }
+
 ISR(USART0_RX_vect) //trigger interrupt when uart1 receives data   USART0_RX_vect
 { 
-	// Code to be executed when the USART receives a byte here
-	Received = UDR0; // Fetch the received byte value into the variable "Received" 
+	Received = UDR0;
+	//USART_Transmit('r');
+}
 
+void ReceivedCheck(void)
+{
+	switch(Received)
+	{
+		case 'A':
+			USART_Transmit(USART_Receive());
+			break;
+			
+		default:
+			Received = Received;
+			break;
+	}
 }
