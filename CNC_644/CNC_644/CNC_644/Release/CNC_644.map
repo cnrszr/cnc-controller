@@ -11,15 +11,16 @@ Allocating common symbols
 Common symbol       size              file
 
 Received            0x1               CNC_644.o
-MAX_SPEED           0x1               STEPPER.o
 InfoSize            0x1               CNC_644.o
 STATE               0x1               STEPPER.o
 DECEL               0x1               STEPPER.o
 ACCEL               0x1               STEPPER.o
 StepPoint           0x1               STEPPER.o
+MIN_OCR0A           0x1               STEPPER.o
 PointerMax          0x1               UART.o
 NUM_STEPS           0x1               STEPPER.o
 Pointer             0x1               UART.o
+Command             0x1               CNC_644.o
 
 Memory Configuration
 
@@ -133,7 +134,7 @@ LOAD c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/av
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x25e
+.text           0x00000000      0x306
  *(.vectors)
  .vectors       0x00000000       0x7c c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5/crtm644p.o
                 0x00000000                __vector_default
@@ -218,36 +219,37 @@ LOAD c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/av
                 0x000000b6                __vector_14
                 0x000000b6                __vector_10
                 0x000000b6                __vector_18
- .text          0x000000ba       0x26 CNC_644.o
+ .text          0x000000ba       0x22 CNC_644.o
                 0x000000ba                main
- .text          0x000000e0      0x108 STEPPER.o
-                0x000000e0                StepperInitialise
-                0x000000fc                StepDown
-                0x00000116                StepUp
-                0x00000130                MoveSteps
-                0x00000132                SetUpCalculations
-                0x00000134                __vector_16
-                0x000001be                StartTimer
-                0x000001e0                StopTimer
- .text          0x000001e8       0x72 UART.o
-                0x000001e8                USART_Init
-                0x0000020c                USART_Transmit
-                0x0000021a                USART_Receive
-                0x00000228                __vector_20
-                0x00000248                ReceivedCheck
- .text          0x0000025a        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
- .text          0x0000025a        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_copy_data.o)
- .text          0x0000025a        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_clear_bss.o)
-                0x0000025a                . = ALIGN (0x2)
+ .text          0x000000dc      0x142 STEPPER.o
+                0x000000dc                StepperInitialise
+                0x000000fa                StepDown
+                0x00000114                StepUp
+                0x0000012e                MoveSteps
+                0x0000014a                __vector_16
+                0x000001e0                StartTimer
+                0x00000202                StopTimer
+                0x0000020a                SetMaxSpeed
+                0x00000212                SetAccel
+                0x00000218                SetDecel
+ .text          0x0000021e       0xe4 UART.o
+                0x0000021e                USART_Init
+                0x00000246                USART_Transmit
+                0x00000254                USART_Receive
+                0x00000262                __vector_20
+ .text          0x00000302        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
+ .text          0x00000302        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_copy_data.o)
+ .text          0x00000302        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_clear_bss.o)
+                0x00000302                . = ALIGN (0x2)
  *(.text.*)
- .text.libgcc   0x0000025a        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
- .text.libgcc   0x0000025a        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_copy_data.o)
- .text.libgcc   0x0000025a        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_clear_bss.o)
-                0x0000025a                . = ALIGN (0x2)
+ .text.libgcc   0x00000302        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
+ .text.libgcc   0x00000302        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_copy_data.o)
+ .text.libgcc   0x00000302        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_clear_bss.o)
+                0x00000302                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000025a        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
-                0x0000025a                _exit
-                0x0000025a                exit
+ .fini9         0x00000302        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
+                0x00000302                _exit
+                0x00000302                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -266,67 +268,69 @@ LOAD c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/av
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000025a        0x4 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
+ .fini0         0x00000302        0x4 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x0000025e                _etext = .
+                0x00000306                _etext = .
 
-.data           0x00800100        0xe load address 0x0000025e
+.data           0x00800100       0x12 load address 0x00000306
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800100        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5/crtm644p.o
  .data          0x00800100        0x0 CNC_644.o
- .data          0x00800100        0xe STEPPER.o
-                0x00800100                StepsPerRound
-                0x00800101                StepAngle
-                0x00800102                HalfSteps
-                0x0080010a                FullSteps
- .data          0x0080010e        0x0 UART.o
- .data          0x0080010e        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
- .data          0x0080010e        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_copy_data.o)
- .data          0x0080010e        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_clear_bss.o)
+ .data          0x00800100       0x11 STEPPER.o
+                0x00800100                alpha
+                0x00800104                StepsPerRound
+                0x00800105                HalfSteps
+                0x0080010d                FullSteps
+ .data          0x00800111        0x0 UART.o
+ .data          0x00800111        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
+ .data          0x00800111        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_copy_data.o)
+ .data          0x00800111        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_clear_bss.o)
  *(.data*)
  *(.rodata)
  *(.rodata*)
  *(.gnu.linkonce.d*)
-                0x0080010e                . = ALIGN (0x2)
-                0x0080010e                _edata = .
-                0x0080010e                PROVIDE (__data_end, .)
+                0x00800112                . = ALIGN (0x2)
+ *fill*         0x00800111        0x1 00
+                0x00800112                _edata = .
+                0x00800112                PROVIDE (__data_end, .)
 
-.bss            0x0080010e        0xa
-                0x0080010e                PROVIDE (__bss_start, .)
+.bss            0x00800112        0xb
+                0x00800112                PROVIDE (__bss_start, .)
  *(.bss)
- .bss           0x0080010e        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5/crtm644p.o
- .bss           0x0080010e        0x0 CNC_644.o
- .bss           0x0080010e        0x0 STEPPER.o
- .bss           0x0080010e        0x0 UART.o
- .bss           0x0080010e        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
- .bss           0x0080010e        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_copy_data.o)
- .bss           0x0080010e        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_clear_bss.o)
+ .bss           0x00800112        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5/crtm644p.o
+ .bss           0x00800112        0x0 CNC_644.o
+ .bss           0x00800112        0x0 STEPPER.o
+ .bss           0x00800112        0x0 UART.o
+ .bss           0x00800112        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
+ .bss           0x00800112        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_copy_data.o)
+ .bss           0x00800112        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_clear_bss.o)
  *(.bss*)
  *(COMMON)
- COMMON         0x0080010e        0x2 CNC_644.o
-                0x0080010e                Received
-                0x0080010f                InfoSize
- COMMON         0x00800110        0x6 STEPPER.o
-                0x00800110                MAX_SPEED
-                0x00800111                STATE
-                0x00800112                DECEL
-                0x00800113                ACCEL
-                0x00800114                StepPoint
-                0x00800115                NUM_STEPS
- COMMON         0x00800116        0x2 UART.o
-                0x00800116                PointerMax
-                0x00800117                Pointer
-                0x00800118                PROVIDE (__bss_end, .)
-                0x0000025e                __data_load_start = LOADADDR (.data)
-                0x0000026c                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x00800112        0x3 CNC_644.o
+                0x00800112                Received
+                0x00800113                InfoSize
+                0x00800114                Command
+ COMMON         0x00800115        0x6 STEPPER.o
+                0x00800115                STATE
+                0x00800116                DECEL
+                0x00800117                ACCEL
+                0x00800118                StepPoint
+                0x00800119                MIN_OCR0A
+                0x0080011a                NUM_STEPS
+ COMMON         0x0080011b        0x2 UART.o
+                0x0080011b                PointerMax
+                0x0080011c                Pointer
+                0x0080011d                PROVIDE (__bss_end, .)
+                0x00000306                __data_load_start = LOADADDR (.data)
+                0x00000318                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800118        0x0
-                0x00800118                PROVIDE (__noinit_start, .)
+.noinit         0x0080011d        0x0
+                0x0080011d                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x00800118                PROVIDE (__noinit_end, .)
-                0x00800118                _end = .
-                0x00800118                PROVIDE (__heap_start, .)
+                0x0080011d                PROVIDE (__noinit_end, .)
+                0x0080011d                _end = .
+                0x0080011d                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)

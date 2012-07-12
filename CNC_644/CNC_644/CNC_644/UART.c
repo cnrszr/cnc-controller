@@ -6,6 +6,8 @@
  *  Author: hslovett
  */ 
  #include "UART.h"
+ #include "STEPPER.h"
+ 
  #include <avr/io.h>
  #include <avr/interrupt.h>
  #include <avr/eeprom.h>
@@ -25,7 +27,7 @@ void USART_Init (unsigned int ubrr)
 	
 	UCSR0B |= (1 << RXCIE0); //set RX interrupt on
 	Received = ' ';
-	
+	Command = 0;
 }
 void USART_Transmit( unsigned char data )
 {
@@ -47,19 +49,37 @@ unsigned char USART_Receive( void )
 ISR(USART0_RX_vect) //trigger interrupt when uart1 receives data   USART0_RX_vect
 { 
 	Received = UDR0;
-	//USART_Transmit('r');
-}
-
-void ReceivedCheck(void)
-{
-	switch(Received)
+	
+	if(Command == 0)
 	{
-		case 'A':
-			USART_Transmit(USART_Receive());
-			break;
+		Command = Received;
+	}
+	else
+	{
+		switch(Command)
+		{
+			case 'S':
+				SetMaxSpeed((int)Received);
+				break;
 			
-		default:
-			Received = Received;
-			break;
+			case 's':
+				StopTimer();
+				break;
+			case 'G':
+				StartTimer();
+				break;
+				
+			case 'A':
+				SetAccel((int)Received);
+				break;
+				
+			case 'D':
+				SetDecel((int)Received);
+				break;
+		}
+		Command = 0;
+		Received = 0;
 	}
 }
+
+

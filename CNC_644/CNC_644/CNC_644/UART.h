@@ -15,13 +15,12 @@
 
 //#define BufferSize 20
 char Received;
+char Command;
 
 void USART_Init (unsigned int ubrr);
 
 void USART_Transmit( unsigned char data );
 
 unsigned char USART_Receive( void );
-
-void ReceivedCheck(void);
 
 #endif /* UART_H_ */
