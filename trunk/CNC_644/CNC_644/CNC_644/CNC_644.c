@@ -27,6 +27,6 @@ int main(void)
 	PORTD = 0x00;
     while(1)
     {
-		ReceivedCheck();							
+		//ReceivedCheck();							
     }
 }

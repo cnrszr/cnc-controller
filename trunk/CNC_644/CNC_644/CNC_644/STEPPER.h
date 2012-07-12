@@ -21,12 +21,15 @@ void StepperInitialise(void);
 //Method to move a given number of steps
 void MoveSteps(unsigned int NumSteps);
 
-//Method to step one step up. : Not publicly available
-//void StepUp(void);
-
-//Method to Step on step down: Not publicly available
-//void StepDown(void);
 
 void StartTimer(void);
+
 void StopTimer(void);
+
+void SetMaxSpeed(int Speed);
+
+void SetAccel(int Accel);
+
+void SetDecel(int Decel);
+
 #endif /* STEPPER_H_ */

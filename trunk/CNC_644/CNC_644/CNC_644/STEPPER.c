@@ -21,12 +21,13 @@ uint8_t STATE;
 uint8_t StepPoint;
 uint8_t ACCEL;
 uint8_t DECEL;
-uint8_t MAX_SPEED;
+uint8_t MIN_OCR0A;
 uint8_t NUM_STEPS;
+float alpha = 7.8;
 
 //Constants
 uint8_t StepsPerRound = 96;
-uint8_t StepAngle = 4; //actual value = 3.75
+
 
 //Step Sequences
 uint8_t HalfSteps[8] = {0x08, 0x0A, 0x02, 0x06, 0x04, 0x05, 0x01, 0x09};
@@ -35,9 +36,9 @@ uint8_t FullSteps[4] = {0x08, 0x02, 0x04, 0x01};
 void StepperInitialise(void)
 {
 	StepPoint = 0;//Initialise the stepper pointer
-	ACCEL = 100;
-	DECEL = 100;
-	MAX_SPEED = 100;
+	ACCEL = 1;
+	DECEL = 1;
+	MIN_OCR0A = 100;
 	NUM_STEPS = 0;
 	STATE = STOP;
 }
@@ -60,21 +61,25 @@ void StepUp(void)
 void MoveSteps(unsigned int NumSteps)
 {
 	//Make calculations
-	
+	if (NumSteps == 0)
+	{
+		STATE  = STOP;
+	}
+	else if(NumSteps == 1)
+	{
+		STATE = DECELERATE;
+	}
+	else //NumSteps > 1
+	{
+		STATE = ACCELERATE;
+	}
 	//Start Timer
 }
 
-//Method to make all the necessary calculations to begin a movement.
-void SetUpCalculations(void)
-{
-	//
-}
+
 //Timer Interrupt
 ISR(TIMER0_COMPA_vect)
 {
-// 	PORTD = 0xFF;
-// 	_delay_ms(1);
-// 	PORTD = 0x00;
 	PORTB |= (1<<MotorEN);
 	StepUp(); //step up each time overflow occurs
 	switch(STATE)
@@ -85,8 +90,8 @@ ISR(TIMER0_COMPA_vect)
 			break;
 			
 		case ACCELERATE:
-			OCR0A--;
-			if(OCR0A == 14)
+			OCR0A -= ACCEL;
+			if(OCR0A <= MIN_OCR0A)
 				STATE = RUN;
 			break;
 			
@@ -94,8 +99,8 @@ ISR(TIMER0_COMPA_vect)
 			break;
 			
 		case DECELERATE:
-			OCR0A ++;
-			if(OCR0A == 255)
+			OCR0A += DECEL;
+			if(OCR0A >= 0xF0)
 				STATE = STOP;
 			break;
 			
@@ -106,10 +111,6 @@ ISR(TIMER0_COMPA_vect)
 	
 }
 
-// unsigned int C0(void)
-// {
-// 	
-// }
 
 void StartTimer(void)
 {
@@ -123,4 +124,19 @@ void StartTimer(void)
 void StopTimer(void)
 {
 	STATE = DECELERATE; //set the state - if the timer is running it will close itself. 
+}
+
+void SetMaxSpeed(int Speed)
+{
+	MIN_OCR0A = 0xFF - (uint8_t)Speed;
+}
+
+void SetAccel(int Accel)
+{
+	ACCEL = (uint8_t)Accel;
+}
+
+void SetDecel(int Decel)
+{
+	DECEL = (uint8_t)Decel;
 }
