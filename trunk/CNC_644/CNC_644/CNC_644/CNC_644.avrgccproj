@@ -64,13 +64,22 @@
     <Compile Include="CNC_644.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="global.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Pin_Definitions.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="STEPPER.c">
+    <Compile Include="sm_driver.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="STEPPER.h">
+    <Compile Include="sm_driver.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="speed_cntr.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="speed_cntr.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="UART.c">

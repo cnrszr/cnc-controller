@@ -7,13 +7,13 @@
  */ 
  #include "UART.h"
  #include "STEPPER.h"
- 
+#include "Pin_Definitions.h"
+
  #include <avr/io.h>
  #include <avr/interrupt.h>
  #include <avr/eeprom.h>
 
- uint8_t Pointer;
- uint8_t PointerMax;
+
  //uint8_t LastReceived;
 void USART_Init (unsigned int ubrr)
 {
@@ -26,8 +26,9 @@ void USART_Init (unsigned int ubrr)
 	UCSR0C = (1<<UCSZ00)|(1<<UCSZ01); //set asynchronous, no parity, one stop bit, 8 bit transfer.
 	
 	UCSR0B |= (1 << RXCIE0); //set RX interrupt on
-	Received = ' ';
-	Command = 0;
+	Pointer = 0;
+	Received[Pointer] = 0;
+	COMMANDRECEIVED = FALSE;
 }
 void USART_Transmit( unsigned char data )
 {
@@ -45,41 +46,85 @@ unsigned char USART_Receive( void )
 	/* Get and return received data from buffer */
 	return UDR0;
 }
+void uart_SendInt(int x)
+{
+  static const char dec[] = "0123456789";
+  unsigned int div_val = 10000;
 
+  if (x < 0){
+    x = - x;
+    USART_Transmit('-');
+  }
+  while (div_val > 1 && div_val > x)
+    div_val /= 10;
+  do{
+    USART_Transmit(dec[x / div_val]);
+    x %= div_val;
+    div_val /= 10;
+  }while(div_val);
+}
+void uart_SendString(unsigned char Str[])
+{
+  unsigned char n = 0;
+  while(Str[n])
+    USART_Transmit(Str[n++]);
+}
+void FlushBuffer(void)
+{
+	COMMANDRECEIVED = FALSE;
+	for(int i = 0; i < Pointer; i++)
+	{
+		Received[i] = 0;
+	}
+	Pointer = 0;
+	Received[Pointer] = 0x00;
+}
 ISR(USART0_RX_vect) //trigger interrupt when uart1 receives data   USART0_RX_vect
 { 
-	Received = UDR0;
-	
-	if(Command == 0)
+	char r = UDR0;
+	if(r == '`')
 	{
-		Command = Received;
+		uart_SendString("Buffer:\"");
+		for(int i = 0; i < Pointer; i++)
+		{
+			USART_Transmit(Received[i]);
+		}
+		uart_SendString("\" ");
+		
+		USART_Transmit((char)13);
+		USART_Transmit('\n');
+	}
+	else if (r == '¬')
+	{
+		FlushBuffer();
+		USART_Transmit((char)13);
+		USART_Transmit('\n');
+	}
+	else if (r == (char)13)
+	{
+		COMMANDRECEIVED = TRUE;
+		
+		USART_Transmit((char)13);
+		USART_Transmit('\n');
 	}
 	else
 	{
-		switch(Command)
+		USART_Transmit(r);
+		Received[Pointer++] = r;
+		if(r == 13)
 		{
-			case 'S':
-				SetMaxSpeed((int)Received);
-				break;
-			
-			case 's':
-				StopTimer();
-				break;
-			case 'G':
-				StartTimer();
-				break;
-				
-			case 'A':
-				SetAccel((int)Received);
-				break;
-				
-			case 'D':
-				SetDecel((int)Received);
-				break;
+			COMMANDRECEIVED = 'Y';
+			USART_Transmit('\n');
 		}
-		Command = 0;
-		Received = 0;
-	}
+	}	
+	
+// 	Received[Pointer++] = UDR0;
+// 	USART_Transmit(Received[Pointer]);
+// 		
+// 	if(Received[Pointer] == 13)
+// 	{
+// 		CommandReceived = TRUE;
+// 	}
 }
 
 

@@ -9,12 +9,14 @@
 #ifndef PIN_DEFINITIONS_H_
 #define PIN_DEFINITIONS_H_
 
+
 /* PORT A */
 #define Motor1 PA0
 #define Motor2 PA1
 #define Motor3 PA2
 #define Motor4 PA3
 /* PORT B */
+#define MotorEnPort PORTB
 #define MotorEN PB0
 
 /* PORT C */
