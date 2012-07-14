@@ -7,14 +7,19 @@
 #define F_CPU 12000000
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <stdlib.h>
 
-#include "UART.h" //UART0
-#include "STEPPER.h"//stepper0
-#include "ObjectProtocol.h"
+#include "UART.h"
+#include "global.h"
+#include "speed_cntr.h"
+#include "sm_driver.h"
+
+unsigned char str[] = {"Command Received"};
 int main(void)
 {
 	USART_Init(MYUBBR); //initialise UART0
-	StepperInitialise();
+	speed_cntr_Init_Timer1();
+	sm_driver_Init_IO();
 	
 	sei();
 	DDRA = 0xFF;//set port c to outputs
@@ -25,8 +30,64 @@ int main(void)
 	PORTC = 0x00;
 	DDRD = 0xFF;
 	PORTD = 0x00;
-    while(1)
-    {
-		//ReceivedCheck();							
-    }
+    int Step;
+	unsigned int accel, decel, speed;
+	Step = 100;
+	accel = 71;
+	speed = 12;
+	decel = 71;
+	while(1)
+	{
+		if(COMMANDRECEIVED == TRUE)
+		{
+			//uart_SendString("Command Received\n\r");
+			if(Received[0] == 'G')
+			{
+				speed_cntr_Move(Step, accel, decel, speed);
+			}
+			else if(Received[0] == 'S')//set steps
+			{
+				Step = atoi((char const *)Received+2);						
+			}
+			else if (Received[0] == 'A')//set acceleration
+			{
+				accel = atoi((char const *)Received+2);
+			}
+			else if (Received[0] == 'd')//set deceleration
+			{
+				decel = atoi((char const *)Received+2);
+			}
+			else if (Received[0] == 's')//set speed
+			{
+				speed = atoi((char const *)Received+2);
+				if (speed > MAXSPEED)
+				{
+					uart_SendString("WARNING: EXCEEDED MAXIMUM SPEED");
+				}
+			}
+			else if (Received[0] == 'I')
+			{
+				uart_SendString("\n\rSteps: ");
+				uart_SendInt(Step);
+				uart_SendString("\n\rAccel: ");
+				uart_SendInt(accel);
+				uart_SendString("\n\rSpeed: ");
+				uart_SendInt(speed);
+				uart_SendString("\n\rDecel: ");
+				uart_SendInt(decel);
+				
+			}
+			else
+			{
+				uart_SendString("Incorrect Command");
+			}
+			COMMANDRECEIVED = FALSE;
+			FlushBuffer();
+			uart_SendString("\n\r>");
+		}
+		else
+		{
+			PORTA = PORTA;
+		}
+	}
 }

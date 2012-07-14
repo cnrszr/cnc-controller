@@ -4,7 +4,9 @@
 
 CNC_644.c
 
-STEPPER.c
+sm_driver.c
+
+speed_cntr.c
 
 UART.c
 
