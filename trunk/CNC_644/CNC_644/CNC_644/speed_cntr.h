@@ -50,12 +50,15 @@ typedef struct {
  * the timer1 frequency is the clock frequency divided by 8.
  */
 // Timer/Counter 1 running on 3,686MHz / 8 = 460,75kHz (2,17uS). (T1-FREQ 460750)
-#define T1_FREQ 460750
+#define T1_FREQ 1500000
 
 //! Number of (full)steps per round on stepper motor in use.
-#define FSPR 200
+#define FSPR 185
 #define MAXSPEED 350 //Maximum speed for Motor
 #define HALFSTEPS
+
+#define MotorEnPort PORTB
+#define MotorEN PB0
 
 #ifdef HALFSTEPS
   #define SPR (FSPR*2)
@@ -85,11 +88,13 @@ typedef struct {
 #define RUN   3
 
 void speed_cntr_Move(signed int step, unsigned int accel, unsigned int decel, unsigned int speed);
+void speed_cntr_MoveX(signed int step, unsigned int accel, unsigned int decel, unsigned int speed);
 void speed_cntr_Init_Timer1(void);
 static unsigned long sqrt(unsigned long x);
 unsigned int min(unsigned int x, unsigned int y);
 
 //! Global status flags
 struct GLOBAL_FLAGS status;
-
+struct GLOBAL_FLAGS statusX;
+int EightBitTemp;
 #endif
