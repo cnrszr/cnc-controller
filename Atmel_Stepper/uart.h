@@ -24,7 +24,7 @@
 #define UART_RX_BUFFER_SIZE 32 // 2,4,8,16,32,64,128 or 256 bytes
 #define UART_RX_BUFFER_MASK ( UART_RX_BUFFER_SIZE - 1 )
 #if ( UART_RX_BUFFER_SIZE & UART_RX_BUFFER_MASK )
-  #error RX buffer size is not a power of 2
+  #error RX buffer size is not a of 2
 #endif
 
 #define UART_TX_BUFFER_SIZE 64 // 2,4,8,16,32,64,128 or 256 bytes
