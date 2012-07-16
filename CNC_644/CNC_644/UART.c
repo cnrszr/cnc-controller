@@ -6,7 +6,7 @@
  *  Author: hslovett
  */ 
  #include "UART.h"
- //#include "STEPPER.h"
+ #include "STEPPER.h"
 #include "Pin_Definitions.h"
 
  #include <avr/io.h>

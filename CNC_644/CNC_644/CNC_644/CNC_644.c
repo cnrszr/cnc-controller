@@ -40,26 +40,38 @@ int main(void)
 	{
 		if(COMMANDRECEIVED == TRUE)
 		{
-			//uart_SendString("Command Received\n\r");
 			if(Received[0] == 'G')
 			{
-				speed_cntr_Move(Step, accel, decel, speed);
+				if(Received[1] == '1')
+				{
+					speed_cntr_Move(Step, accel, decel, speed);
+					//StartTimer1();
+				}
+				else if (Received[1] == '2')
+				{
+					speed_cntr_MoveX(Step, accel, decel, speed);
+				}
+				
 			}
 			else if(Received[0] == 'S')//set steps
 			{
-				Step = atoi((char const *)Received+2);						
+				Step = atoi((char const *)Received+2);	
+				//speed_cntr1_Setup1(Step, accel, decel, speed);
 			}
 			else if (Received[0] == 'A')//set acceleration
 			{
 				accel = atoi((char const *)Received+2);
+				//speed_cntr1_Setup1(Step, accel, decel, speed);
 			}
 			else if (Received[0] == 'd')//set deceleration
 			{
 				decel = atoi((char const *)Received+2);
+				//speed_cntr1_Setup1(Step, accel, decel, speed);
 			}
 			else if (Received[0] == 's')//set speed
 			{
 				speed = atoi((char const *)Received+2);
+				//speed_cntr1_Setup1(Step, accel, decel, speed);
 				if (speed > MAXSPEED)
 				{
 					uart_SendString("WARNING: EXCEEDED MAXIMUM SPEED");
@@ -87,7 +99,7 @@ int main(void)
 		}
 		else
 		{
-			PORTA = PORTA;
+			PORTA = PORTA;//added to fill the else statement else the compiler removes the entire if/else
 		}
 	}
 }

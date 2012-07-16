@@ -12,8 +12,7 @@ speed_cntr.d speed_cntr.o: .././speed_cntr.c \
  c:\program\ files\ (x86)\atmel\avr\ studio\ 5.0\avr\ toolchain\bin\../lib/gcc/avr/4.5.1/../../../../avr/include/avr/fuse.h \
  c:\program\ files\ (x86)\atmel\avr\ studio\ 5.0\avr\ toolchain\bin\../lib/gcc/avr/4.5.1/../../../../avr/include/avr/lock.h \
  c:\program\ files\ (x86)\atmel\avr\ studio\ 5.0\avr\ toolchain\bin\../lib/gcc/avr/4.5.1/../../../../avr/include/avr/interrupt.h \
- .././global.h .././sm_driver.h .././speed_cntr.h .././UART.h \
- .././Pin_Definitions.h
+ .././global.h .././sm_driver.h .././speed_cntr.h .././UART.h
 
 c:\program\ files\ (x86)\atmel\avr\ studio\ 5.0\avr\ toolchain\bin\../lib/gcc/avr/4.5.1/../../../../avr/include/avr/io.h:
 
@@ -48,5 +47,3 @@ c:\program\ files\ (x86)\atmel\avr\ studio\ 5.0\avr\ toolchain\bin\../lib/gcc/av
 .././speed_cntr.h:
 
 .././UART.h:
-
-.././Pin_Definitions.h:
