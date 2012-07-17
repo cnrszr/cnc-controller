@@ -57,8 +57,14 @@ typedef struct {
 #define MAXSPEED 350 //Maximum speed for Motor
 #define HALFSTEPS
 
-#define MotorEnPort PORTB
-#define MotorEN PB0
+#define MotorEnPortZ PORTD
+#define MotorENZ PD3
+
+#define MotorEnPortY PORTB
+#define MotorENY PB3
+
+#define MotorEnPortX PORTA
+#define MotorENX PA3
 
 #ifdef HALFSTEPS
   #define SPR (FSPR*2)
@@ -87,8 +93,10 @@ typedef struct {
 #define DECEL 2
 #define RUN   3
 
-void speed_cntr_Move(signed int step, unsigned int accel, unsigned int decel, unsigned int speed);
+void speed_cntr_MoveZ(signed int step, unsigned int accel, unsigned int decel, unsigned int speed);
 void speed_cntr_MoveX(signed int step, unsigned int accel, unsigned int decel, unsigned int speed);
+void speed_cntr_MoveY(signed int step, unsigned int accel, unsigned int decel, unsigned int speed);
+
 void speed_cntr_Init_Timer1(void);
 static unsigned long sqrt(unsigned long x);
 unsigned int min(unsigned int x, unsigned int y);
@@ -96,5 +104,7 @@ unsigned int min(unsigned int x, unsigned int y);
 //! Global status flags
 struct GLOBAL_FLAGS status;
 struct GLOBAL_FLAGS statusX;
-int EightBitTemp;
+struct GLOBAL_FLAGS statusY;
+int EightBitTempX;
+int EightBitTempY;
 #endif

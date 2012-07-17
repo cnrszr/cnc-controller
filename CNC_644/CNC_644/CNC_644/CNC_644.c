@@ -44,14 +44,17 @@ int main(void)
 			{
 				if(Received[1] == '1')
 				{
-					speed_cntr_Move(Step, accel, decel, speed);
+					speed_cntr_MoveZ(Step, accel, decel, speed);
 					//StartTimer1();
 				}
 				else if (Received[1] == '2')
 				{
 					speed_cntr_MoveX(Step, accel, decel, speed);
 				}
-				
+				else if(Received[1] == '3')
+				{
+					speed_cntr_MoveY(Step, accel, decel, speed);
+				}				
 			}
 			else if(Received[0] == 'S')//set steps
 			{

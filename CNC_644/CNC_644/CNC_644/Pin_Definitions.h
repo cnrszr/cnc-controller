@@ -16,8 +16,8 @@
 #define Motor3 PA2
 #define Motor4 PA3
 /* PORT B */
-#define MotorEnPort PORTB
-#define MotorEN PB0
+#define MotorEnPortZ PORTB
+#define MotorENZ PB0
 
 /* PORT C */
 //Half Dead.

@@ -38,18 +38,38 @@
  * Set the desired drive port and pins to support your device
  *
  */
-#define SM_PORT         PORTD
-#define SM_DRIVE        DDRD
-#define A1    PD7 //!< Stepper motor winding A positive pole.
-#define A2    PD6 //!< Stepper motor winding A negative pole.
-#define B1    PD5 //!< Stepper motor winding B positive pole.
-#define B2    PD4 //!< Stepper motor winding B negative pole.
+#define SMZ_PORT         PORTD
+#define SMZ_DRIVE        DDRD
+#define ZA1    PD7 //!< Stepper motor winding A positive pole.
+#define ZA2    PD6 //!< Stepper motor winding A negative pole.
+#define ZB1    PD5 //!< Stepper motor winding B positive pole.
+#define ZB2    PD4 //!< Stepper motor winding B negative pole.
+
+#define SMX_PORT         PORTA
+#define SMX_DRIVE        DDRA
+#define XA1    PA7 //!< Stepper motor winding A positive pole.
+#define XA2    PA6 //!< Stepper motor winding A negative pole.
+#define XB1    PA5 //!< Stepper motor winding B positive pole.
+#define XB2    PA4 //!< Stepper motor winding B negative pole.
+
+#define SMY_PORT         PORTB
+#define SMY_DRIVE        DDRB
+#define YA1    PB7 //!< Stepper motor winding A positive pole.
+#define YA2    PB6 //!< Stepper motor winding A negative pole.
+#define YB1    PB5 //!< Stepper motor winding B positive pole.
+#define YB2    PB4 //!< Stepper motor winding B negative pole.
 
 void sm_driver_Init_IO(void);
-unsigned char sm_driver_StepCounter(signed char inc);
-void sm_driver_StepOutput(unsigned char pos);
+unsigned char smZ_driver_StepCounter(signed char inc);
+unsigned char smX_driver_StepCounter(signed char inc);
+unsigned char smY_driver_StepCounter(signed char inc);
+void smZ_driver_StepOutput(unsigned char pos);
+void smX_driver_StepOutput(unsigned char pos);
+void smY_driver_StepOutput(unsigned char pos);
 
 //! Position of stepper motor.
-extern int stepPosition;
+extern int stepPositionZ;
+extern int stepPositionX;
+extern int stepPositionY;
 
 #endif
