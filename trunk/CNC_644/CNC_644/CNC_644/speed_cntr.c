@@ -31,6 +31,31 @@
 //! Cointains data for timer interrupt.
 speedRampData srd;
 speedRampData srdX;
+speedRampData srdY;
+/*! \brief Init of Timer/Counter1.
+ *
+ *  Set up Timer/Counter1 to use mode 1 CTC and
+ *  enable Output Compare A Match Interrupt.
+ */
+void speed_cntr_Init_Timer1(void)
+{
+  // Tells what part of speed ramp we are in.
+  srd.run_state = STOP;
+  // Timer/Counter 1 in mode 4 CTC (Not running).
+  TCCR1B = (1<<WGM12);
+  // Timer/Counter 1 Output Compare A Match Interrupt enable.
+  TIMSK1 = (1<<OCIE1A);
+  
+  srdX.run_state = STOP;
+  TCCR0B = (1<<WGM02);
+  TIMSK0 = (1<<OCIE0A);
+  EightBitTempX = 0;
+  
+  srdY.run_state = STOP;
+  TCCR2B = (1<<WGM22);
+  TIMSK2 = (1<<OCIE2A);
+  EightBitTempY = 0;  
+}
 /*! \brief Move the stepper motor a given number of steps.
  *
  *  Makes the stepper motor move the given number of steps.
@@ -44,10 +69,203 @@ speedRampData srdX;
  *  \param decel  Decelration to use, in 0.01*rad/sec^2.
  *  \param speed  Max speed, in 0.01*rad/sec.
  */
-void speed_cntr_Move(signed int step, unsigned int accel, unsigned int decel, unsigned int speed)
+void speed_cntr_MoveX(signed int step, unsigned int accel, unsigned int decel, unsigned int speed)
+{
+	EightBitTempX = 0;
+	speed = min(speed, MAXSPEED);//don't exceed max speed
+	MotorEnPortX |= (1<<MotorENX);
+  //! Number of steps before we hit max speed.
+  unsigned int max_s_lim;
+  //! Number of steps before we must start deceleration (if accel does not hit max speed).
+  unsigned int accel_lim;
+
+  // Set direction from sign on step value.
+  if(step < 0){
+    srdX.dir = CCW;
+    step = -step;
+  }
+  else{
+    srdX.dir = CW;
+  }
+
+  // If moving only 1 step.
+  if(step == 1){
+    // Move one step...
+    srdX.accel_count = -1;
+    // ...in DECEL state.
+    srdX.run_state = DECEL;
+    // Just a short delay so main() can act on 'running'.
+	
+    srdX.step_delay = 1000;
+    statusX.running = TRUE;
+    OCR0A = 10;
+    // Run Timer/Counter 1 with prescaler = 8.
+    TCCR0B |= ((0<<CS12)|(1<<CS11)|(0<<CS10));
+  }
+  // Only move if number of steps to move is not zero.
+  else if(step != 0){
+    // Refer to documentation for detailed information about these calculations.
+
+    // Set max speed limit, by calc min_delay to use in timer.
+    // min_delay = (alpha / tt)/ w
+    srdX.min_delay = A_T_x100 / speed;
+
+    // Set accelration by calc the first (c0) step delay .
+    // step_delay = 1/tt * sqrt(2*alpha/accel)
+    // step_delay = ( tfreq*0.676/100 )*100 * sqrt( (2*alpha*10000000000) / (accel*100) )/10000
+    srdX.step_delay = (T1_FREQ_148 * sqrt(A_SQ / accel))/100;
+
+    // Find out after how many steps does the speed hit the max speed limit.
+    // max_s_lim = speed^2 / (2*alpha*accel)
+    max_s_lim = (long)speed*speed/(long)(((long)A_x20000*accel)/100);
+    // If we hit max speed limit before 0,5 step it will round to 0.
+    // But in practice we need to move atleast 1 step to get any speed at all.
+    if(max_s_lim == 0){
+      max_s_lim = 1;
+    }
+
+    // Find out after how many steps we must start deceleration.
+    // n1 = (n1+n2)decel / (accel + decel)
+    accel_lim = ((long)step*decel) / (accel+decel);
+    // We must accelrate at least 1 step before we can start deceleration.
+    if(accel_lim == 0){
+      accel_lim = 1;
+    }
+
+    // Use the limit we hit first to calc decel.
+    if(accel_lim <= max_s_lim){
+      srdX.decel_val = accel_lim - step;
+    }
+    else{
+      srdX.decel_val = -((long)max_s_lim*accel)/decel;
+    }
+    // We must decelrate at least 1 step to stop.
+    if(srdX.decel_val == 0){
+      srdX.decel_val = -1;
+    }
+
+    // Find step to start decleration.
+    srdX.decel_start = step + srdX.decel_val;
+
+    // If the maximum speed is so low that we dont need to go via accelration state.
+    if(srdX.step_delay <= srdX.min_delay){
+      srdX.step_delay = srdX.min_delay;
+      srdX.run_state = RUN;
+    }
+    else{
+      srdX.run_state = ACCEL;
+    }
+
+    // Reset counter.
+    srdX.accel_count = 0;
+    statusX.running = TRUE;
+    OCR0A = 10;
+    // Set Timer/Counter to divide clock by 8
+    TCCR0B |= ((0<<CS12)|(1<<CS11)|(0<<CS10));
+  }
+  EightBitTempX = srdX.step_delay;
+  
+}
+void speed_cntr_MoveY(signed int step, unsigned int accel, unsigned int decel, unsigned int speed)
+{
+	EightBitTempY = 0;
+	speed = min(speed, MAXSPEED);//don't exceed max speed
+	MotorEnPortY |= (1<<MotorENY);
+  //! Number of steps before we hit max speed.
+  unsigned int max_s_lim;
+  //! Number of steps before we must start deceleration (if accel does not hit max speed).
+  unsigned int accel_lim;
+
+  // Set direction from sign on step value.
+  if(step < 0){
+    srdY.dir = CCW;
+    step = -step;
+  }
+  else{
+    srdY.dir = CW;
+  }
+
+  // If moving only 1 step.
+  if(step == 1){
+    // Move one step...
+    srdY.accel_count = -1;
+    // ...in DECEL state.
+    srdY.run_state = DECEL;
+    // Just a short delay so main() can act on 'running'.
+	
+    srdY.step_delay = 1000;
+    statusY.running = TRUE;
+    OCR2A = 10;
+    // Run Timer/Counter 1 with prescaler = 8.
+    TCCR2B |= ((0<<CS22)|(1<<CS21)|(0<<CS20));
+  }
+  // Only move if number of steps to move is not zero.
+  else if(step != 0){
+    // Refer to documentation for detailed information about these calculations.
+
+    // Set max speed limit, by calc min_delay to use in timer.
+    // min_delay = (alpha / tt)/ w
+    srdY.min_delay = A_T_x100 / speed;
+
+    // Set accelration by calc the first (c0) step delay .
+    // step_delay = 1/tt * sqrt(2*alpha/accel)
+    // step_delay = ( tfreq*0.676/100 )*100 * sqrt( (2*alpha*10000000000) / (accel*100) )/10000
+    srdY.step_delay = (T1_FREQ_148 * sqrt(A_SQ / accel))/100;
+
+    // Find out after how many steps does the speed hit the max speed limit.
+    // max_s_lim = speed^2 / (2*alpha*accel)
+    max_s_lim = (long)speed*speed/(long)(((long)A_x20000*accel)/100);
+    // If we hit max speed limit before 0,5 step it will round to 0.
+    // But in practice we need to move atleast 1 step to get any speed at all.
+    if(max_s_lim == 0){
+      max_s_lim = 1;
+    }
+
+    // Find out after how many steps we must start deceleration.
+    // n1 = (n1+n2)decel / (accel + decel)
+    accel_lim = ((long)step*decel) / (accel+decel);
+    // We must accelrate at least 1 step before we can start deceleration.
+    if(accel_lim == 0){
+      accel_lim = 1;
+    }
+
+    // Use the limit we hit first to calc decel.
+    if(accel_lim <= max_s_lim){
+      srdY.decel_val = accel_lim - step;
+    }
+    else{
+      srdY.decel_val = -((long)max_s_lim*accel)/decel;
+    }
+    // We must decelrate at least 1 step to stop.
+    if(srdY.decel_val == 0){
+      srdY.decel_val = -1;
+    }
+
+    // Find step to start decleration.
+    srdY.decel_start = step + srdY.decel_val;
+
+    // If the maximum speed is so low that we dont need to go via accelration state.
+    if(srdY.step_delay <= srdY.min_delay){
+      srdY.step_delay = srdY.min_delay;
+      srdY.run_state = RUN;
+    }
+    else{
+      srdY.run_state = ACCEL;
+    }
+
+    // Reset counter.
+    srdY.accel_count = 0;
+    statusY.running = TRUE;
+    OCR2A = 10;
+    // Set Timer/Counter to divide clock by 8
+    TCCR2B |= ((0<<CS22)|(1<<CS21)|(0<<CS20));
+  }
+  EightBitTempY = srdY.step_delay;
+}
+void speed_cntr_MoveZ(signed int step, unsigned int accel, unsigned int decel, unsigned int speed)
 {
 	speed = min(speed, MAXSPEED);//don't exceed max speed
-	MotorEnPort |= (1<<MotorEN);
+	MotorEnPortZ |= (1<<MotorENZ);
   //! Number of steps before we hit max speed.
   unsigned int max_s_lim;
   //! Number of steps before we must start deceleration (if accel does not hit max speed).
@@ -138,26 +356,6 @@ void speed_cntr_Move(signed int step, unsigned int accel, unsigned int decel, un
   }
 }
 
-/*! \brief Init of Timer/Counter1.
- *
- *  Set up Timer/Counter1 to use mode 1 CTC and
- *  enable Output Compare A Match Interrupt.
- */
-void speed_cntr_Init_Timer1(void)
-{
-  // Tells what part of speed ramp we are in.
-  srd.run_state = STOP;
-  // Timer/Counter 1 in mode 4 CTC (Not running).
-  TCCR1B = (1<<WGM12);
-  // Timer/Counter 1 Output Compare A Match Interrupt enable.
-  TIMSK1 = (1<<OCIE1A);
-  
-  srdX.run_state = STOP;
-  TCCR0B = (1<<WGM02);
-  TIMSK0 = (1<<OCIE0A);
-  EightBitTemp = 0;
-}
-
 /*! \brief Timer/Counter1 Output Compare A Match Interrupt.
  *
  *  Timer/Counter1 Output Compare A Match Interrupt.
@@ -168,9 +366,99 @@ void speed_cntr_Init_Timer1(void)
  *  A new step delay is calculated to follow wanted speed profile
  *  on basis of accel/decel parameters.
  */
+ISR(TIMER0_COMPA_vect )
+{
+	// Holds next delay period.
+	unsigned int new_step_delayX;
+	// Remember the last step delay used when accelerating.
+	static int last_accel_delayX;
+	// Counting steps when moving.
+	static unsigned int step_countX = 0;
+	// Keep track of remainder from new_step-delay calculation to increase accuracy
+	static unsigned int restX = 0;
+	
+	if(EightBitTempX > 255)
+	{
+		EightBitTempX -= 255;
+		OCR0A = 255;	
+	}
+	else
+	{
+		EightBitTempX = srdX.step_delay;
+		if(EightBitTempX > 255)
+		{
+			OCR0A = 255;	
+		}				
+		else
+		{
+			OCR0A = EightBitTempX;	
+		}				
+		switch(srdX.run_state) 
+		{
+			case STOP:
+				MotorEnPortX &= ~(1<<MotorENX);
+				step_countX = 0;
+				restX = 0;
+				// Stop Timer/Counter 1.
+				TCCR0B &= ~((1<<CS22)|(1<<CS21)|(1<<CS20));
+				statusX.running = FALSE;
+				break;
 
+			case ACCEL:
+				smX_driver_StepCounter(srdX.dir);
+				step_countX++;
+				srdX.accel_count++;
+				new_step_delayX = srdX.step_delay - (((2 * (long)srdX.step_delay) + restX)/(4 * srdX.accel_count + 1));
+				restX = ((2 * (long)srdX.step_delay)+restX)%(4 * srdX.accel_count + 1);
+				// Check if we should start decelration.
+				if(step_countX >= srdX.decel_start) 
+				{
+					srdX.accel_count = srdX.decel_val;
+					srdX.run_state = DECEL;
+				}
+			// Chech if we hitted max speed.
+				else if(new_step_delayX <= srdX.min_delay) 
+				{
+					last_accel_delayX = new_step_delayX;
+					new_step_delayX = srdX.min_delay;
+					restX = 0;
+					srdX.run_state = RUN;
+				}
+				break;
+
+			case RUN:
+				smX_driver_StepCounter(srdX.dir);
+				step_countX++;
+				new_step_delayX = srdX.min_delay;
+				// Chech if we should start decelration.
+				if(step_countX >= srdX.decel_start) 
+				{
+					srdX.accel_count = srdX.decel_val;
+					// Start decelration with same delay as accel ended with.
+					new_step_delayX = last_accel_delayX;
+					srdX.run_state = DECEL;
+				}
+				break;
+
+			case DECEL:
+				smX_driver_StepCounter(srdY.dir);
+				step_countX++;
+				srdX.accel_count++;
+				new_step_delayX = srdX.step_delay - (((2 * (long)srdX.step_delay) + restX)/(4 * srdX.accel_count + 1));
+				restX = ((2 * (long)srdX.step_delay)+restX)%(4 * srdX.accel_count + 1);
+				// Check if we at last step
+				if(srdX.accel_count >= 0)
+				{
+					srdX.run_state = STOP;
+				}
+				break;
+		}
+		srdX.step_delay = new_step_delayX;
+	}  
+}
 ISR(TIMER1_COMPA_vect )
 {
+	PORTA |= (1<<PA1);
   // Holds next delay period.
   unsigned int new_step_delay;
   // Remember the last step delay used when accelrating.
@@ -185,7 +473,7 @@ ISR(TIMER1_COMPA_vect )
   switch(srd.run_state) 
   {
     case STOP:
-	  MotorEnPort &= ~(1<<MotorEN);
+	  MotorEnPortZ &= ~(1<<MotorENZ);
       step_count = 0;
       rest = 0;
       // Stop Timer/Counter 1.
@@ -194,7 +482,7 @@ ISR(TIMER1_COMPA_vect )
       break;
 
     case ACCEL:
-      sm_driver_StepCounter(srd.dir);
+      smZ_driver_StepCounter(srd.dir);
       step_count++;
       srd.accel_count++;
       new_step_delay = srd.step_delay - (((2 * (long)srd.step_delay) + rest)/(4 * srd.accel_count + 1));
@@ -214,7 +502,7 @@ ISR(TIMER1_COMPA_vect )
       break;
 
     case RUN:
-      sm_driver_StepCounter(srd.dir);
+      smZ_driver_StepCounter(srd.dir);
       step_count++;
       new_step_delay = srd.min_delay;
       // Chech if we should start decelration.
@@ -227,7 +515,7 @@ ISR(TIMER1_COMPA_vect )
       break;
 
     case DECEL:
-      sm_driver_StepCounter(srd.dir);
+      smZ_driver_StepCounter(srd.dir);
       step_count++;
       srd.accel_count++;
       new_step_delay = srd.step_delay - (((2 * (long)srd.step_delay) + rest)/(4 * srd.accel_count + 1));
@@ -239,6 +527,97 @@ ISR(TIMER1_COMPA_vect )
       break;
   }
   srd.step_delay = new_step_delay;
+  PORTA &= ~(1<<PA1);
+}
+ISR(TIMER2_COMPA_vect )
+{
+	// Holds next delay period.
+	unsigned int new_step_delayY;
+	// Remember the last step delay used when accelrating.
+	static int last_accel_delayY;
+	// Counting steps when moving.
+	static unsigned int step_countY = 0;
+	// Keep track of remainder from new_step-delay calculation to incrase accurancy
+	static unsigned int restY = 0;
+	
+	if(EightBitTempY > 255)
+	{
+		EightBitTempY -= 255;
+		OCR2A = 255;	
+	}
+	else
+	{
+		EightBitTempY = srdY.step_delay;
+		if(EightBitTempY > 255)
+		{
+			OCR2A = 255;	
+		}				
+		else
+		{
+			OCR2A = EightBitTempY;	
+		}				
+		switch(srdY.run_state) 
+		{
+			case STOP:
+				MotorEnPortY &= ~(1<<MotorENY);
+				step_countY = 0;
+				restY = 0;
+				// Stop Timer/Counter 1.
+				TCCR2B &= ~((1<<CS22)|(1<<CS21)|(1<<CS20));
+				statusY.running = FALSE;
+				break;
+
+			case ACCEL:
+				smY_driver_StepCounter(srdY.dir);
+				step_countY++;
+				srdY.accel_count++;
+				new_step_delayY = srdY.step_delay - (((2 * (long)srdY.step_delay) + restY)/(4 * srdY.accel_count + 1));
+				restY = ((2 * (long)srdY.step_delay)+restY)%(4 * srdY.accel_count + 1);
+				// Check if we should start decelration.
+				if(step_countY >= srdY.decel_start) 
+				{
+					srdY.accel_count = srdY.decel_val;
+					srdY.run_state = DECEL;
+				}
+			// Chech if we hitted max speed.
+				else if(new_step_delayY <= srdY.min_delay) 
+				{
+					last_accel_delayY = new_step_delayY;
+					new_step_delayY = srdY.min_delay;
+					restY = 0;
+					srdY.run_state = RUN;
+				}
+				break;
+
+			case RUN:
+				smY_driver_StepCounter(srdY.dir);
+				step_countY++;
+				new_step_delayY = srdY.min_delay;
+				// Chech if we should start decelration.
+				if(step_countY >= srdY.decel_start) 
+				{
+					srdY.accel_count = srdY.decel_val;
+					// Start decelration with same delay as accel ended with.
+					new_step_delayY = last_accel_delayY;
+					srdY.run_state = DECEL;
+				}
+				break;
+
+			case DECEL:
+				smY_driver_StepCounter(srdY.dir);
+				step_countY++;
+				srdY.accel_count++;
+				new_step_delayY = srdY.step_delay - (((2 * (long)srdY.step_delay) + restY)/(4 * srdY.accel_count + 1));
+				restY = ((2 * (long)srdY.step_delay)+restY)%(4 * srdY.accel_count + 1);
+				// Check if we at last step
+				if(srdY.accel_count >= 0)
+				{
+					srdY.run_state = STOP;
+				}
+				break;
+		}
+		srdY.step_delay = new_step_delayY;
+	}  
 }
 
 /*! \brief Square root routine.
@@ -266,18 +645,23 @@ static unsigned long sqrt(unsigned long x)
       x -= xr + q2;
       f = 1;                  // set flag
     }
-    else{
+    else
+	{
       f = 0;                  // clear flag
     }
     xr >>= 1;
-    if(f){
+    if(f)
+	{
       xr += q2;               // test flag
     }
-  } while(q2 >>= 2);          // shift twice
-  if(xr < x){
+  }
+  while(q2 >>= 2);          // shift twice
+  if(xr < x)
+  {
     return xr +1;             // add for rounding
   }
-  else{
+  else
+  {
     return xr;
   }
 }
@@ -298,191 +682,3 @@ unsigned int min(unsigned int x, unsigned int y)
   }
 }
 
-void speed_cntr_MoveX(signed int step, unsigned int accel, unsigned int decel, unsigned int speed)
-{
-	EightBitTemp = 0;
-	speed = min(speed, MAXSPEED);//don't exceed max speed
-	MotorEnPort |= (1<<MotorEN);
-  //! Number of steps before we hit max speed.
-  unsigned int max_s_lim;
-  //! Number of steps before we must start deceleration (if accel does not hit max speed).
-  unsigned int accel_lim;
-
-  // Set direction from sign on step value.
-  if(step < 0){
-    srdX.dir = CCW;
-    step = -step;
-  }
-  else{
-    srdX.dir = CW;
-  }
-
-  // If moving only 1 step.
-  if(step == 1){
-    // Move one step...
-    srdX.accel_count = -1;
-    // ...in DECEL state.
-    srdX.run_state = DECEL;
-    // Just a short delay so main() can act on 'running'.
-	
-    srdX.step_delay = 1000;
-    statusX.running = TRUE;
-    OCR0A = 10;
-    // Run Timer/Counter 1 with prescaler = 8.
-    TCCR0B |= ((0<<CS12)|(1<<CS11)|(0<<CS10));
-  }
-  // Only move if number of steps to move is not zero.
-  else if(step != 0){
-    // Refer to documentation for detailed information about these calculations.
-
-    // Set max speed limit, by calc min_delay to use in timer.
-    // min_delay = (alpha / tt)/ w
-    srdX.min_delay = A_T_x100 / speed;
-
-    // Set accelration by calc the first (c0) step delay .
-    // step_delay = 1/tt * sqrt(2*alpha/accel)
-    // step_delay = ( tfreq*0.676/100 )*100 * sqrt( (2*alpha*10000000000) / (accel*100) )/10000
-    srdX.step_delay = (T1_FREQ_148 * sqrt(A_SQ / accel))/100;
-
-    // Find out after how many steps does the speed hit the max speed limit.
-    // max_s_lim = speed^2 / (2*alpha*accel)
-    max_s_lim = (long)speed*speed/(long)(((long)A_x20000*accel)/100);
-    // If we hit max speed limit before 0,5 step it will round to 0.
-    // But in practice we need to move atleast 1 step to get any speed at all.
-    if(max_s_lim == 0){
-      max_s_lim = 1;
-    }
-
-    // Find out after how many steps we must start deceleration.
-    // n1 = (n1+n2)decel / (accel + decel)
-    accel_lim = ((long)step*decel) / (accel+decel);
-    // We must accelrate at least 1 step before we can start deceleration.
-    if(accel_lim == 0){
-      accel_lim = 1;
-    }
-
-    // Use the limit we hit first to calc decel.
-    if(accel_lim <= max_s_lim){
-      srdX.decel_val = accel_lim - step;
-    }
-    else{
-      srdX.decel_val = -((long)max_s_lim*accel)/decel;
-    }
-    // We must decelrate at least 1 step to stop.
-    if(srdX.decel_val == 0){
-      srdX.decel_val = -1;
-    }
-
-    // Find step to start decleration.
-    srdX.decel_start = step + srdX.decel_val;
-
-    // If the maximum speed is so low that we dont need to go via accelration state.
-    if(srdX.step_delay <= srdX.min_delay){
-      srdX.step_delay = srdX.min_delay;
-      srdX.run_state = RUN;
-    }
-    else{
-      srdX.run_state = ACCEL;
-    }
-
-    // Reset counter.
-    srdX.accel_count = 0;
-    statusX.running = TRUE;
-    OCR0A = 10;
-    // Set Timer/Counter to divide clock by 8
-    TCCR0B |= ((0<<CS12)|(1<<CS11)|(0<<CS10));
-  }
-  EightBitTemp = srdX.step_delay;
-}
-
-ISR(TIMER0_COMPA_vect )
-{
-	// Holds next delay period.
-	unsigned int new_step_delayX;
-	// Remember the last step delay used when accelrating.
-	static int last_accel_delayX;
-	// Counting steps when moving.
-	static unsigned int step_countX = 0;
-	// Keep track of remainder from new_step-delay calculation to incrase accurancy
-	static unsigned int restX = 0;
-	
-	if(EightBitTemp > 255)
-	{
-		EightBitTemp -= 255;
-		OCR0A = 255;	
-	}
-	else
-	{
-		EightBitTemp = srdX.step_delay;
-		if(EightBitTemp > 255)
-		{
-			OCR0A = 255;	
-		}				
-		else
-		{
-			OCR0A = EightBitTemp;	
-		}				
-		switch(srdX.run_state) 
-		{
-			case STOP:
-				MotorEnPort &= ~(1<<MotorEN);
-				step_countX = 0;
-				restX = 0;
-				// Stop Timer/Counter 1.
-				TCCR0B &= ~((1<<CS12)|(1<<CS11)|(1<<CS10));
-				statusX.running = FALSE;
-				break;
-
-			case ACCEL:
-				sm_driver_StepCounter(srdX.dir);
-				step_countX++;
-				srdX.accel_count++;
-				new_step_delayX = srdX.step_delay - (((2 * (long)srdX.step_delay) + restX)/(4 * srdX.accel_count + 1));
-				restX = ((2 * (long)srdX.step_delay)+restX)%(4 * srdX.accel_count + 1);
-				// Check if we should start decelration.
-				if(step_countX >= srdX.decel_start) 
-				{
-					srdX.accel_count = srdX.decel_val;
-					srdX.run_state = DECEL;
-				}
-			// Chech if we hitted max speed.
-				else if(new_step_delayX <= srdX.min_delay) 
-				{
-					last_accel_delayX = new_step_delayX;
-					new_step_delayX = srdX.min_delay;
-					restX = 0;
-					srdX.run_state = RUN;
-				}
-				break;
-
-			case RUN:
-				sm_driver_StepCounter(srdX.dir);
-				step_countX++;
-				new_step_delayX = srdX.min_delay;
-				// Chech if we should start decelration.
-				if(step_countX >= srdX.decel_start) 
-				{
-					srdX.accel_count = srdX.decel_val;
-					// Start decelration with same delay as accel ended with.
-					new_step_delayX = last_accel_delayX;
-					srdX.run_state = DECEL;
-				}
-				break;
-
-			case DECEL:
-				sm_driver_StepCounter(srdX.dir);
-				step_countX++;
-				srdX.accel_count++;
-				new_step_delayX = srdX.step_delay - (((2 * (long)srdX.step_delay) + restX)/(4 * srdX.accel_count + 1));
-				restX = ((2 * (long)srdX.step_delay)+restX)%(4 * srdX.accel_count + 1);
-				// Check if we at last step
-				if(srdX.accel_count >= 0)
-				{
-					srdX.run_state = STOP;
-				}
-				break;
-		}
-		srdX.step_delay = new_step_delayX;
-		
-	}  
-}
