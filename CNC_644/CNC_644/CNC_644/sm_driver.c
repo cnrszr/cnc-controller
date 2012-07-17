@@ -20,7 +20,8 @@
  * $RCSfile: sm_driver.c,v $
  * $Date: 2006/05/08 12:25:58 $
  *****************************************************************************/
-
+/*This Atmel code has been edited by seblovett to support multiple motors simulataneously.
+Same principles apply, just implemented in 3 timers and different pins.*/
 #include <avr/io.h>
 #include "global.h"
 #include "sm_driver.h"

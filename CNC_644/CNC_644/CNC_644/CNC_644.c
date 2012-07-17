@@ -42,19 +42,33 @@ int main(void)
 		{
 			if(Received[0] == 'G')
 			{
-				if(Received[1] == '1')
+				if(statusX.running == TRUE)
 				{
-					speed_cntr_MoveZ(Step, accel, decel, speed);
-					//StartTimer1();
+					StartX();
 				}
-				else if (Received[1] == '2')
+				
+				if(statusY.running == TRUE)
 				{
-					speed_cntr_MoveX(Step, accel, decel, speed);
+					StartY();
 				}
-				else if(Received[1] == '3')
+				
+				if(statusZ.running == TRUE)
 				{
-					speed_cntr_MoveY(Step, accel, decel, speed);
-				}				
+					StartZ();
+				}
+							
+			}
+			else if (Received[0] == 'X')
+			{
+				speed_cntr_SetupX(Step, accel, decel, speed);
+			}
+			else if (Received[0] == 'Y')
+			{
+				speed_cntr_SetupY(Step, accel, decel, speed);
+			}
+			else if (Received[0] == 'Z')
+			{
+				speed_cntr_SetupZ(Step, accel, decel, speed);
 			}
 			else if(Received[0] == 'S')//set steps
 			{

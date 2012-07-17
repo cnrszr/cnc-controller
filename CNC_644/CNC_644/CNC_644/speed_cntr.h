@@ -93,16 +93,18 @@ typedef struct {
 #define DECEL 2
 #define RUN   3
 
-void speed_cntr_MoveZ(signed int step, unsigned int accel, unsigned int decel, unsigned int speed);
-void speed_cntr_MoveX(signed int step, unsigned int accel, unsigned int decel, unsigned int speed);
-void speed_cntr_MoveY(signed int step, unsigned int accel, unsigned int decel, unsigned int speed);
-
+void speed_cntr_SetupZ(signed int step, unsigned int accel, unsigned int decel, unsigned int speed);
+void speed_cntr_SetupX(signed int step, unsigned int accel, unsigned int decel, unsigned int speed);
+void speed_cntr_SetupY(signed int step, unsigned int accel, unsigned int decel, unsigned int speed);
+void StartX(void);
+void StartY(void);
+void StartZ(void);
 void speed_cntr_Init_Timer1(void);
 static unsigned long sqrt(unsigned long x);
 unsigned int min(unsigned int x, unsigned int y);
 
 //! Global status flags
-struct GLOBAL_FLAGS status;
+struct GLOBAL_FLAGS statusZ;
 struct GLOBAL_FLAGS statusX;
 struct GLOBAL_FLAGS statusY;
 int EightBitTempX;
