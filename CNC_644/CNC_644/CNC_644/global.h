@@ -35,4 +35,8 @@ struct GLOBAL_FLAGS {
   unsigned char dummy:6;
 };
 
+int XLocation;
+int YLocation;
+int ZLocation;
+
 #endif

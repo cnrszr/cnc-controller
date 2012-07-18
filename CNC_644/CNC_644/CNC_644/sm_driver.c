@@ -43,9 +43,9 @@ unsigned char steptab[] = {((1<<BIT_A1) | (0<<BIT_A2) | (0<<BIT_B1) | (0<<BIT_B2
                                    ((1<<BIT_A1) | (0<<BIT_A2) | (0<<BIT_B1) | (1<<BIT_B2))};
 
 //! Position of stepper motor (relative to starting position as zero)
-int stepPositionZ = 0;
-int stepPositionX = 0;
-int stepPositionY = 0;
+// int stepPositionZ = 0;
+// int stepPositionX = 0;
+// int stepPositionY = 0;
 
 /*! \brief Init of io-pins for stepper motor.
  */
@@ -79,11 +79,13 @@ unsigned char smZ_driver_StepCounter(signed char inc)
   // Update
   if(inc == CCW)
   {
-    stepPositionZ--;
+    /*stepPositionZ--;*/
+	ZLocation--;
   }
   else
   {
-    stepPositionZ++;
+    //stepPositionZ++;
+	ZLocation++;
   }
 
 #ifdef HALFSTEPS
@@ -117,10 +119,12 @@ unsigned char smX_driver_StepCounter(signed char inc)
   static unsigned char counter = 0;
   // Update
   if(inc == CCW){
-    stepPositionX--;
+    //stepPositionX--;
+	XLocation--;
   }
   else{
-    stepPositionX++;
+    //stepPositionX++;
+	XLocation++;
   }
 
 #ifdef HALFSTEPS
@@ -150,10 +154,12 @@ unsigned char smY_driver_StepCounter(signed char inc)
   static unsigned char counter = 0;
   // Update
   if(inc == CCW){
-    stepPositionY--;
+    //stepPositionY--;
+	YLocation--;
   }
   else{
-    stepPositionY++;
+    //stepPositionY++;
+	YLocation++;
   }
 
 #ifdef HALFSTEPS

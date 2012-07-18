@@ -22,18 +22,9 @@ OBJS_AS_ARGS :=
 C_DEPS := 
 C_DEPS_AS_ARGS := 
 EXECUTABLES := 
-LIB_AS_ARGS :=
 OUTPUT_FILE_PATH :=
 OUTPUT_FILE_PATH_AS_ARGS :=
-HEX_FLASH_FILE_PATH :=
-HEX_FLASH_FILE_PATH_AS_ARGS :=
-HEX_EEPROM_FILE_PATH :=
-HEX_EEPROM_FILE_PATH_AS_ARGS :=
-LSS_FILE_PATH :=
-LSS_FILE_PATH_AS_ARGS :=
-MAP_FILE_PATH :=
-MAP_FILE_PATH_AS_ARGS :=
-AVR_APP_PATH :=C:/Program Files (x86)/Atmel/AVR Studio 5.0/AVR ToolChain/bin/
+AVR_APP_PATH :=$$$AVR_APP_PATH$$$
 QUOTE := "
 ADDITIONAL_DEPENDENCIES:=
 OUTPUT_FILE_DEP:=
@@ -45,6 +36,8 @@ SUBDIRS :=
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
 ../CNC_644.c \
+../sm_driver.c \
+../speed_cntr.c \
 ../UART.c
 
 
@@ -56,21 +49,29 @@ ASM_SRCS +=
 
 OBJS +=  \
 CNC_644.o \
+sm_driver.o \
+speed_cntr.o \
 UART.o
 
 
 OBJS_AS_ARGS +=  \
 CNC_644.o \
+sm_driver.o \
+speed_cntr.o \
 UART.o
 
 
 C_DEPS +=  \
 CNC_644.d \
+sm_driver.d \
+speed_cntr.d \
 UART.d
 
 
 C_DEPS_AS_ARGS +=  \
 CNC_644.d \
+sm_driver.d \
+speed_cntr.d \
 UART.d
 
 
@@ -78,29 +79,15 @@ OUTPUT_FILE_PATH +=CNC_644.elf
 
 OUTPUT_FILE_PATH_AS_ARGS +=CNC_644.elf
 
-HEX_FLASH_FILE_PATH +=CNC_644.hex
-
-HEX_FLASH_FILE_PATH_AS_ARGS +=CNC_644.hex
-
-HEX_EEPROM_FILE_PATH +=CNC_644.eep
-
-HEX_EEPROM_FILE_PATH_AS_ARGS +=CNC_644.eep
-
-LSS_FILE_PATH +=CNC_644.lss
-
-LSS_FILE_PATH_AS_ARGS +=CNC_644.lss
-
-MAP_FILE_PATH =CNC_644.map
-
-MAP_FILE_PATH_AS_ARGS =CNC_644.map
-
-LIB_AS_ARGS +=libCNC_644.a
-
-ADDITIONAL_DEPENDENCIES:= $(HEX_FLASH_FILE_PATH) $(LSS_FILE_PATH) $(HEX_EEPROM_FILE_PATH) size
+ADDITIONAL_DEPENDENCIES:=
 
 OUTPUT_FILE_DEP:= ./makedep.mk
 
-# AVR/GNU C Compiler
+# AVR32/GNU C Compiler
+
+
+
+
 
 
 
@@ -109,12 +96,16 @@ OUTPUT_FILE_DEP:= ./makedep.mk
 ./%.o: .././%.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler
-	$(QUOTE)$(AVR_APP_PATH)avr-gcc.exe$(QUOTE) -funsigned-char -funsigned-bitfields -O0 -fpack-struct -fshort-enums -g2 -Wall -c -std=gnu99  -mmcu=atmega644p   -MD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o"$@" "$<"
+	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Studio 6.0\extensions\Atmel\AVRGCC\3.3.2.31\AVRToolchain\bin\avr-gcc.exe$(QUOTE)  -funsigned-char -funsigned-bitfields -O0 -fpack-struct -fshort-enums -g2 -Wall -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)"  -mmcu=atmega644p  -o"$@" "$<" 
 	@echo Finished building: $<
 
 
 
-# AVR/GNU Assembler
+# AVR32/GNU Preprocessing Assembler
+
+
+
+# AVR32/GNU Assembler
 
 
 
@@ -130,28 +121,22 @@ endif
 # All Target
 all: $(OUTPUT_FILE_PATH) $(ADDITIONAL_DEPENDENCIES)
 
-# AVR/GNU C/C++ Linker
 $(OUTPUT_FILE_PATH): $(OBJS) $(USER_OBJS) $(OUTPUT_FILE_DEP)
 	@echo Building target: $@
-	@echo Invoking: AVR/GNU C/C++ Linker
-	$(QUOTE)$(AVR_APP_PATH)avr-gcc.exe$(QUOTE)  -mmcu=atmega644p  -Wl,-Map=$(MAP_FILE_PATH_AS_ARGS) -o$(OUTPUT_FILE_PATH_AS_ARGS) $(OBJS_AS_ARGS) $(USER_OBJS) $(LIBS)
+	@echo Invoking: AVR/GNU C Linker
+	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Studio 6.0\extensions\Atmel\AVRGCC\3.3.2.31\AVRToolchain\bin\avr-gcc.exe$(QUOTE) -o$(OUTPUT_FILE_PATH_AS_ARGS) $(OBJS_AS_ARGS) $(USER_OBJS) $(LIBS) -Wl,-Map="CNC_644.map" -Wl,--start-group -Wl,-lm  -Wl,--end-group  -mmcu=atmega644p  
 	@echo Finished building target: $@
+	"C:\Program Files (x86)\Atmel\Atmel Studio 6.0\extensions\Atmel\AVRGCC\3.3.2.31\AVRToolchain\bin\avr-objcopy.exe" -O ihex -R .eeprom -R .fuse -R .lock -R .signature  "CNC_644.elf" "CNC_644.hex"
+	"C:\Program Files (x86)\Atmel\Atmel Studio 6.0\extensions\Atmel\AVRGCC\3.3.2.31\AVRToolchain\bin\avr-objcopy.exe" -j .eeprom  --set-section-flags=.eeprom=alloc,load --change-section-lma .eeprom=0  --no-change-warnings -O ihex "CNC_644.elf" "CNC_644.eep" || exit 0
+	"C:\Program Files (x86)\Atmel\Atmel Studio 6.0\extensions\Atmel\AVRGCC\3.3.2.31\AVRToolchain\bin\avr-objdump.exe" -h -S "CNC_644.elf" > "CNC_644.lss"
+	"C:\Program Files (x86)\Atmel\Atmel Studio 6.0\extensions\Atmel\AVRGCC\3.3.2.31\AVRToolchain\bin\avr-size.exe" -C --mcu=atmega644p  "CNC_644.elf"
+	
 
 
 
-$(HEX_FLASH_FILE_PATH): $(OUTPUT_FILE_PATH)
-	$(QUOTE)$(AVR_APP_PATH)avr-objcopy.exe$(QUOTE) -O ihex -R .eeprom -R .fuse -R .lock -R .signature  $(QUOTE)$<$(QUOTE) $(QUOTE)$@$(QUOTE)
-
-$(HEX_EEPROM_FILE_PATH): $(OUTPUT_FILE_PATH)
-	-$(QUOTE)$(AVR_APP_PATH)avr-objcopy.exe$(QUOTE) -j .eeprom --set-section-flags=.eeprom=alloc,load --change-section-lma .eeprom=0 --no-change-warnings -O ihex $(QUOTE)$<$(QUOTE) $(QUOTE)$@$(QUOTE) || exit 0
-
-$(LSS_FILE_PATH): $(OUTPUT_FILE_PATH)
-	$(QUOTE)$(AVR_APP_PATH)avr-objdump.exe$(QUOTE) -h -S $(QUOTE)$<$(QUOTE) > $(QUOTE)$@$(QUOTE)
-
-size: $(OUTPUT_FILE_PATH)
-	@$(QUOTE)$(AVR_APP_PATH)avr-size.exe$(QUOTE) -C --mcu=atmega644p $(OUTPUT_FILE_PATH_AS_ARGS)
 
 # Other Targets
 clean:
-	-$(RM) $(OBJS_AS_ARGS)$(C_DEPS_AS_ARGS) $(EXECUTABLES) $(LIB_AS_ARGS) $(HEX_FLASH_FILE_PATH_AS_ARGS) $(HEX_EEPROM_FILE_PATH_AS_ARGS) $(LSS_FILE_PATH_AS_ARGS) $(MAP_FILE_PATH_AS_ARGS)
-
+	-$(RM) $(OBJS_AS_ARGS)$(C_DEPS_AS_ARGS) $(EXECUTABLES) 
+	rm -rf "CNC_644.hex" "CNC_644.lss" "CNC_644.eep" "CNC_644.map"
+	
