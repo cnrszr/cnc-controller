@@ -15,6 +15,70 @@
 #include "sm_driver.h"
 
 unsigned char str[] = {"Command Received"};
+	
+void StartMotors(void)
+{
+	if(statusX.running == TRUE)
+	{
+		StartX();
+	}
+				
+	if(statusY.running == TRUE)
+	{
+		StartY();
+	}
+				
+	if(statusZ.running == TRUE)
+	{
+		StartZ();
+	}
+}
+
+void G00() 
+{
+	//uart_SendString("Rapid Move");
+	int point = 3;
+	int Step;
+	while(Received[point++])
+	{
+		if(Received[point] == 'X')
+		{
+			double dblTemp = 0;
+			int LocTemp;
+			point++;											
+			dblTemp = atof((char const *)Received + point);
+			LocTemp = (int)(dblTemp*100);
+			//uart_SendInt(LocTemp);
+			Step = LocTemp - XLocation;
+			speed_cntr_SetupX(Step, 500, 500, 350);
+		}
+		if(Received[point] == 'Y')
+		{
+			double dblTemp = 0;
+			int LocTemp;
+			point++;											
+			dblTemp = atof((char const *)Received + point);
+			LocTemp = (int)(dblTemp*100);
+			//uart_SendInt(LocTemp);
+			Step = LocTemp - YLocation;
+			speed_cntr_SetupY(Step, 500, 500, 350);
+		}
+		if(Received[point] == 'Z')
+		{
+			double dblTemp = 0;
+			int LocTemp;
+			point++;											
+			dblTemp = atof((char const *)Received + point);
+			LocTemp = (int)(dblTemp*100);
+			Step = LocTemp - ZLocation;
+			speed_cntr_SetupZ(Step, 500, 500, 350);
+			//uart_SendInt(LocTemp);
+		}
+										
+	}
+	StartMotors();					
+}
+
 int main(void)
 {
 	USART_Init(MYUBBR); //initialise UART0
@@ -39,6 +103,8 @@ int main(void)
 	accel = 71;
 	speed = 12;
 	decel = 71;
+	//int point = 0;
+	
 	uart_SendString("Ready!\n\r");
 	while(1)
 	{
@@ -46,21 +112,29 @@ int main(void)
 		{			
 			switch(Received[0])
 			{
+				case 'G':
+					switch(Received[1])
+					{
+						case '0':
+							switch(Received[2])
+							{
+								case '0':
+									G00();
+									break;
+									
+								default:
+									uart_SendString("Unsupported G Code");
+									break;
+							}
+							break;
+						
+						default:
+							uart_SendString("Unsupported G Code");
+							break;
+					}
+					break;
 				case 'g': //start all set up motors. 
-					if(statusX.running == TRUE)
-					{
-						StartX();
-					}
-				
-					if(statusY.running == TRUE)
-					{
-						StartY();
-					}
-				
-					if(statusZ.running == TRUE)
-					{
-						StartZ();
-					}
+					StartMotors();
 					break;
 				
 				case 'X': //Set up the X motor with current settings
